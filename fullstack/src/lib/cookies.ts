@@ -1,18 +1,38 @@
 import { cookies } from "next/headers";
-import { PartTypes } from "@/types/Parts";
-import { partTypeValidation } from "./validation";
+import { ComponentType } from "@/api/componentType";
+import { Component } from "@/api/component";
 
-export function getResumePartsFromCookies() {
+type ComponentResumeFromCookiesReturn = {
+  type: ComponentType;
+  component: Component | undefined;
+};
+
+export async function getComponentsResumeFromCookies(): Promise<
+  ComponentResumeFromCookiesReturn[]
+> {
   const cookiesStore = cookies();
-  console.log('cookies', cookiesStore.getAll());
+  const componentTypes = await ComponentType.getComponentTypes();
 
-  const resumeParts = Object.entries(PartTypes).map(([key, value]) => {
-    if(cookiesStore.has(value))
-    {
-      return {type: partTypeValidation(key), value: +cookiesStore.get(value)!.value};
+  const componentsResumeData = componentTypes.map((componentType) => {
+    if (cookiesStore.has(componentType.name)) {
+      return {
+        type: componentType,
+        componentId: +cookiesStore.get(componentType.name)!.value,
+      };
     }
-    return {type: partTypeValidation(key), value: undefined};
-  })
+    return { type: componentType, componentId: undefined };
+  });
 
-  return resumeParts;
+  const componentsResume: ComponentResumeFromCookiesReturn[] =
+    await Promise.all(
+      componentsResumeData.map(async ({ type, componentId }) => {
+        if (componentId !== undefined) {
+          const component = await Component.getComponent(componentId);
+          return { type: type, component: component };
+        }
+        return { type: type, component: undefined };
+      })
+    );
+
+  return componentsResume;
 }

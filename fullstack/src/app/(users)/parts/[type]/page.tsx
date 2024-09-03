@@ -1,46 +1,26 @@
 'use server';
 
-import SelectPartTable from "@/components/layouts/Tables/SelectPartTable";
-import { Part, Parts, PartTypes } from "@/types/Parts";
+import { ComponentType } from "@/api/componentType";
+import TableComponentsSelect from "@/components/layouts/User/Tables/TableComponentsSelect";
 import { redirect } from "next/navigation";
 
-const partsCollection: Record<PartTypes, Part[]> = {
-  [PartTypes.cpu]: [
-    { id: 1, productName: "AMD Ryzen 5 7600X" },
-    { id: 2, productName: "AMD Ryzen 5 7700X" },
-  ],
-  [PartTypes.motherboard]: [
-    { id: 1, productName: "AMD Ryzen 5 7600X" },
-    { id: 2, productName: "AMD Ryzen 5 7700X" },
-  ],
-};
-
-
-function typeValidation(param: string): (PartTypes | undefined) {
-  const enumKey:([string, PartTypes] | undefined) = Object.entries(PartTypes).find(
-    ([key,val]) => val.toLowerCase() === param.toLowerCase()
-  );
-
-  if(enumKey !== undefined)
-  {
-    return(enumKey[1]);
-  }
-
-  else {
-    return undefined;
-  }
+async function validateType (typeName: string): Promise<ComponentType | undefined> {
+  const types = await ComponentType.getComponentTypes();
+  const type = types.find((item) => item.name === typeName);
+  return type;
 }
 
-export default async function SelectPartPage({params}:{params: {type: string} }) {
-  const type = typeValidation(params.type);
-  if(!type)
+export default async function SelectComponentPage({params}:{params: {type: string} }) {
+  
+  const type = await validateType(params.type);
+  if(type === undefined)
   {
     redirect('/');
   }
   
   return (
     <main className="w-screen h-screen flex items-center justify-center">
-      <SelectPartTable type={type} parts={partsCollection[type]} />
+      <TableComponentsSelect type={type} />
     </main>
   );
 }

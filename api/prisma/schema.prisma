@@ -12,6 +12,7 @@ model ComponentType {
   id          Int         @default(autoincrement()) @id
   name        String      @unique
   description String?
+  order       Int?
   Components  Component[]
   SpecificationTypes SpecificationType[]
 }
@@ -31,6 +32,8 @@ model SpecificationType {
   id                Int             @default(autoincrement()) @id
   name              String
   description       String?
+  valueType         String?
+  filterType        String?
   componentType     ComponentType   @relation(fields: [componentTypeId], references: [id])
   componentTypeId   Int
   Specifications Specification[]
