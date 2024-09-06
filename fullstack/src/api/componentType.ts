@@ -13,9 +13,32 @@ export class ComponentType {
     this.order = order;
   }
 
+  public static async getComponentType(
+    id: number
+  ): Promise<ComponentType | undefined> {
+    try {
+      const res = await fetch(`http://localhost:4000/componentType/${id}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) {
+        throw new Error(`Error fetching component types: ${res.statusText}`);
+      }
+      const data: ComponentTypeProp = await res.json();
+
+      const ComponentTypeItem: ComponentType = new ComponentType(data);
+
+      return ComponentTypeItem;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
   public static async getComponentTypes(): Promise<ComponentType[]> {
     try {
-      const res = await fetch("http://localhost:4000/componentTypes");
+      const res = await fetch("http://localhost:4000/componentTypes", {
+        cache: "no-store",
+      });
       if (!res.ok) {
         throw new Error(`Error fetching component types: ${res.statusText}`);
       }
@@ -34,12 +57,25 @@ export class ComponentType {
     }
   }
 
-  public static async createComponentType(
-    componentType: { name: string ; description: string; order: number;}
-  ): Promise<ComponentType | undefined> {
+  public static toComponentTypesArray(data: ComponentTypeProp[]) {
+    const ComponentTypes: ComponentType[] = data.map(
+      (item: ComponentTypeProp) => {
+        return new ComponentType(item);
+      }
+    );
+
+    return ComponentTypes;
+  }
+
+  public static async createComponentType(componentType: {
+    name: string;
+    description: string;
+    order: number;
+  }): Promise<ComponentType | undefined> {
     try {
       const { name, description, order } = componentType;
       const res = await fetch("http://localhost:4000/createComponentType", {
+        cache: "no-store",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,6 +87,77 @@ export class ComponentType {
       }
       const data: Promise<ComponentType> = await res.json();
       return data;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  public static async updateComponentType(
+    id: number,
+    componentType: { name: string; description: string; order: number }
+  ): Promise<ComponentType | undefined> {
+    try {
+      const { name, description, order } = componentType;
+      const oldComponentType = await this.getComponentType(id);
+      if (oldComponentType !== undefined) {
+        const oldOrder = oldComponentType.order;
+
+        if (oldOrder !== order) {
+          const componentTypes = await this.getComponentTypes();
+          componentTypes.map(async (componentType) => {
+            let newOrder: number | undefined;
+            if (
+              componentType.order > oldOrder &&
+              componentType.order <= order
+            ) {
+              newOrder = componentType.order - 1;
+            } else if (
+              componentType.order < oldOrder &&
+              componentType.order >= order
+            ) {
+              newOrder = componentType.order + 1;
+            }
+
+            if (newOrder !== undefined) {
+              const res = await fetch(
+                "http://localhost:4000/updateComponentType",
+                {
+                  cache: "no-store",
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id: componentType.id,
+                    name: componentType.name,
+                    description: componentType.description,
+                    order: newOrder,
+                  }),
+                }
+              );
+              if (!res.ok) {
+                throw new Error(
+                  `Error updating component type: ${res.statusText}`
+                );
+              }
+            }
+          });
+        }
+        const res = await fetch("http://localhost:4000/updateComponentType", {
+          cache: "no-store",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id, name, description, order }),
+        });
+        if (!res.ok) {
+          throw new Error(`Error updating component type: ${res.statusText}`);
+        }
+        const data: Promise<ComponentType> = await res.json();
+        return data;
+      }
     } catch (error) {
       console.error(error);
       return undefined;

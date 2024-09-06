@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteCookie } from "@/app/actions/cookies";
-import ButtonRemove from "../../Buttons/actions/ButtonRemove";
+import ButtonRemove from "../../../Buttons/actions/ButtonRemove";
 
 export default function ButtonRemoveComponentResume({
   typeName,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../../button";
+import { Button } from "../button";
 
 export default function ButtonAction({
   className,
@@ -10,7 +10,7 @@ export default function ButtonAction({
   customText
 }: {
   className?: string;
-  onClick: () => Promise<void>;
+  onClick: (() => Promise<void>) | Function;
   defaultLogo: boolean,
   logo?: string;
   customText?: string

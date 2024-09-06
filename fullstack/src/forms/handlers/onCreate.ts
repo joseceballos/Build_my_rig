@@ -1,6 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export async function onSubmitForm(
+export async function onCreate(
   event: React.FormEvent<HTMLFormElement>,
   fnPost: Function,
   fnError: Function,

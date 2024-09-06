@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import ButtonAdd from "../../Buttons/actions/ButtonAdd";
+import ButtonAdd from "../../../Buttons/actions/ButtonAdd";
 
 export default function ButtonSelectComponent({typeName}:{typeName: string}) {
   const router = useRouter();

@@ -12,7 +12,7 @@ model ComponentType {
   id          Int         @default(autoincrement()) @id
   name        String      @unique
   description String?
-  order       Int?
+  order       Int
   Components  Component[]
   SpecificationTypes SpecificationType[]
 }

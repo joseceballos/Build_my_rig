@@ -1,12 +1,11 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormWithRouter } from "@/hooks/useFormWithRouter";
-import { FieldValues, Path, DefaultValues } from "react-hook-form";
+import { Path, DefaultValues } from "react-hook-form";
 import { z } from "zod";
-import { onSubmitForm } from "../handlers/onSubmit";
+import { onCreate } from "../handlers/onCreate";
+import InputBasic from "./InputBasic";
 
 type FormDefaultValues<T> = DefaultValues<T>;
 
@@ -23,6 +22,7 @@ type FormBasicProps<T extends z.ZodObject<any>> = {
     title: string;
     placeHolder: string;
     type: string;
+    options?: string[] | number[];
   }[];
 };
 
@@ -32,27 +32,28 @@ export default function FormBasic<T extends z.ZodObject<any>>({
   inputs,
 }: FormBasicProps<T>) {
   const { errors, setErrors, router, form } = useFormWithRouter(config);
+  const defaultValues = config.defaultValues;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    onSubmitForm(event, fnPost, setErrors, router);
+    onCreate(event, fnPost, setErrors, router);
   }
 
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-6">
         {inputs.map((input) => (
-          <div key={input.name}>
-            <label htmlFor={input.name}>{input.title}</label>
-            <Input
-              id={input.name}
-              placeholder={input.placeHolder}
-              type={input.type}
-              {...form.register(input.name)}
-            />
-            {errors[input.name] && (
-              <p className="text-red-500">{errors[input.name]}</p>
-            )}
-          </div>
+          <InputBasic
+            key={input.name}
+            id={input.name}
+            title={input.title}
+            placeholder={input.placeHolder}
+            type={input.type}
+            form={form}
+            errors={errors}
+            defaultValue={defaultValues[input.name]}
+            options={input.options}
+            {...form.register(input.name)}
+          />
         ))}
 
         <Button type="submit">Submit</Button>

@@ -28,7 +28,11 @@ export class AppController {
 
   @Get('componentTypes/')
   async getComponentTypes(): Promise<ComponentTypeModel[]> {
-    return this.componentTypeService.componentTypes({});
+    return this.componentTypeService.componentTypes({
+      orderBy: {
+        order: 'asc',
+      },
+    });
   }
 
   @Get('component/:id')

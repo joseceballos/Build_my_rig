@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonAdd from "@/components/ui/User/Buttons/actions/ButtonAdd";
+import ButtonAdd from "@/components/ui/Buttons/actions/ButtonAdd";
 import { createCookie } from "@/app/actions/cookies";
 
 type ElementComponentSelectProps = {
