@@ -22,6 +22,7 @@ export async function getComponentsResumeFromCookies(): Promise<
     }
     return { type: componentType, componentId: undefined };
   });
+  
 
   const componentsResume: ComponentResumeFromCookiesReturn[] =
     await Promise.all(

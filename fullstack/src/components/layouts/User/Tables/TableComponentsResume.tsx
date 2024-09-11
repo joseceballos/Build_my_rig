@@ -2,7 +2,7 @@
 
 import TableSelectable from "./TableSelectable";
 import ElementComponentItem from "../Elements/ElementComponentResume";
-import tableDataComponentsResume from "@/tables/tableDataComponentsResume";
+import tableDataComponentsResume from "@/data/tableDataComponentsResume";
 
 export default async function TableComponentsResume() {
   const { headers, elements } = await tableDataComponentsResume();

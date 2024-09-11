@@ -27,7 +27,7 @@ type FormBasicProps<T extends z.ZodObject<any>> = {
     title: string;
     placeHolder: string;
     type: string;
-    options?: string[] | number[];
+    options?: { value: number | string; name: string }[];
   }[];
 };
 

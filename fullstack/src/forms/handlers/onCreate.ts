@@ -10,6 +10,7 @@ export async function onCreate(
 
   const formData = new FormData(event.currentTarget);
   const res = await fnPost(formData);
+  console.log(res);
 
   if (!res.success && res.errors) {
     const flattenedErrors: { [key: string]: string } = {};

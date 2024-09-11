@@ -9,23 +9,21 @@ datasource db {
 }
 
 model ComponentType {
-  id          Int         @default(autoincrement()) @id
-  name        String      @unique
-  description String?
-  order       Int
-  Components  Component[]
+  id                 Int              @default(autoincrement()) @id
+  name               String           @unique
+  description        String?
+  order              Int
+  Components         Component[]
   SpecificationTypes SpecificationType[]
 }
 
 model Component {
-  id        Int            @default(autoincrement()) @id
-  productId String         @unique
-  model     String         @unique
-  type      ComponentType  @relation(fields: [typeId], references: [id])
-  typeId    Int
-  Specifications Specification[]
-  brand      Brand?  @relation(fields: [brandId], references: [id])
-  brandId    Int?
+  id               Int             @default(autoincrement()) @id
+  productId        String          @unique
+  model            String          @unique
+  componentType    ComponentType   @relation(fields: [componentTypeId], references: [id], onDelete: Cascade)
+  componentTypeId  Int
+  Specifications   ComponentSpecification[]
 }
 
 model SpecificationType {
@@ -34,23 +32,25 @@ model SpecificationType {
   description       String?
   valueType         String?
   filterType        String?
-  componentType     ComponentType   @relation(fields: [componentTypeId], references: [id])
-  componentTypeId   Int
-  Specifications Specification[]
+  componentType     ComponentType?  @relation(fields: [componentTypeId], references: [id], onDelete: Cascade)
+  componentTypeId   Int?
+  Specifications    Specification[]
 }
 
 model Specification {
-  id                     Int             @default(autoincrement()) @id
-  value                  String
-  description            String?
-  specificationType      SpecificationType  @relation(fields: [specificationTypeId], references: [id])
-  specificationTypeId    Int
-  component              Component  @relation(fields: [componentId], references: [id])
-  componentId            Int
+  id               Int             @default(autoincrement()) @id
+  value            String
+  description      String?
+  specificationType SpecificationType @relation(fields: [specificationTypeId], references: [id], onDelete: Cascade)
+  specificationTypeId Int
+  Components       ComponentSpecification[]
 }
 
-model Brand {
-  id          Int         @default(autoincrement()) @id
-  name        String      @unique
-  Components  Component[]
+model ComponentSpecification {
+  componentId     Int
+  specificationId Int
+  component       Component      @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  specification   Specification  @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+
+  @@id([componentId, specificationId])
 }

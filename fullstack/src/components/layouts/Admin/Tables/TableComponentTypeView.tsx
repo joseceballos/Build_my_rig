@@ -1,10 +1,10 @@
 "use server";
 
-import tableDataComponentTypes from "@/tables/tableDataComponentTypes";
+import tableDataComponentTypes from "@/data/tableDataComponentTypes";
 import TableEditable from "./TableEditable";
-import ElementsComponentTypeEditable from "../Elements/ElementsComponentTypeEditable";
 import { toPlainObjectArray } from "@/lib/utils";
 import { ComponentTypeProp } from "@/types/api";
+import ElementsComponentTypeEditable from "../Elements/ComponentType/ElementsComponentTypeEditable";
 
 export default async function TableComponentTypeView() {
   const { headers, elements } = await tableDataComponentTypes();

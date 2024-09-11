@@ -32,15 +32,18 @@ export default function InputBasic({
   errors: { [key: string]: string };
   defaultValue?: string | number;
   value?: string | number;
-  options?: string[] | number[];
+  options?: { value: number | string; name: string }[];
   onChangeHandle?: (value: string) => void;
 }) {
 
   let content;
 
   function handleValueChange(value: string) {
-    if(onChangeHandle!== undefined)
+    if(onChangeHandle !== undefined)
+    {
       onChangeHandle(value);
+      console.log(value);
+    }
   }
 
   function handleChange (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -58,8 +61,8 @@ export default function InputBasic({
             <SelectLabel>{title}</SelectLabel>
             {options !== undefined &&
               options.map((option) => (
-                <SelectItem key={option} value={option.toString()}>
-                  {option}
+                <SelectItem key={option.name} value={option.value.toString()}>
+                  {option.name}
                 </SelectItem>
               ))}
           </SelectGroup>

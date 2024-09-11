@@ -10,10 +10,18 @@ export default function ButtonAction({
   customText
 }: {
   className?: string;
-  onClick: (() => Promise<void>) | Function;
-  defaultLogo: boolean,
+  onClick: (() => Promise<void>) | (() => void);
+  defaultLogo: boolean;
   logo?: string;
-  customText?: string
+  customText?: string;
 }) {
-  return <Button className={className} onClick={onClick}>{defaultLogo ? logo : customText}</Button>;
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    onClick();
+  }
+
+  return (
+    <Button className={className} onClick={handleClick}>
+      {defaultLogo ? logo : customText}
+    </Button>
+  );
 }

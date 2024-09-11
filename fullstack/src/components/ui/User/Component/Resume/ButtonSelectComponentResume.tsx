@@ -7,7 +7,7 @@ export default function ButtonSelectComponent({typeName}:{typeName: string}) {
   const router = useRouter();
 
   async function handleRedirect() {
-    router.push(`parts/${typeName}`);
+    router.push(`components/${typeName}`);
   }
 
   return (
