@@ -1,6 +1,6 @@
 "use server";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import TableComponentsSelect from "@/components/layouts/User/Tables/TableComponentsSelect";
 import { redirect } from "next/navigation";
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import { formComponentType } from "@/forms/schemas/SchemasComponentType";
 
 export async function postCreateComponentType(data: FormData) {

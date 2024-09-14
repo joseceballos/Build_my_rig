@@ -1,15 +1,8 @@
-export type ComponentTypeProp = {
+export type ProductTypeProp = {
   id: number;
   name: string;
   description: string;
   order: number;
-};
-
-export type ComponentProp = {
-  id: number;
-  productId: string;
-  model: string;
-  componentType: ComponentTypeProp;
 };
 
 export type SpecificationTypeProp = {
@@ -18,7 +11,7 @@ export type SpecificationTypeProp = {
   description?: string;
   valueType: string;
   filterType: string;
-  componentType?: ComponentTypeProp;
+  productType?: ProductTypeProp;
 };
 
 export type SpecificationProp = {
@@ -26,4 +19,32 @@ export type SpecificationProp = {
   value: string;
   description?: string;
   specificationType: SpecificationTypeProp;
+};
+
+export type PropertyProp = {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+export type ProductRangeProp = {
+  id: number;
+  name: string;
+  description?: string;
+  productType: ProductTypeProp;
+}
+
+export type FamilyProp = {
+  id: number;
+  name: string;
+  year: number;
+  description?: string;
+  productRange: ProductRangeProp;
+}
+
+export type ProductProp = {
+  id: number;
+  productId: string;
+  model: string;
+  family: FamilyProp;
 };

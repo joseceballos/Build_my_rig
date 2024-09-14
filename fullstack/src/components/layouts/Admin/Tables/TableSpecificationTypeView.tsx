@@ -4,7 +4,7 @@ import tableDataSpecificationTypes from "@/data/tableDataSpecificationTypes";
 import TableEditable from "./TableEditable";
 import { toPlainObjectArray } from "@/lib/utils";
 import { ComponentTypeProp, SpecificationTypeProp } from "@/types/api";
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import ElementsSpecificationTypeEditable from "../Elements/SpecificationType/ElementsSpecificationTypeEditable";
 
 export default async function TableSpecificationTypeView() {

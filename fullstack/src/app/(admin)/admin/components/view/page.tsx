@@ -1,6 +1,6 @@
 "use server";
 
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 import TableComponentView from "@/components/layouts/Admin/Tables/TableComponentView";
 
 export default async function viewComponentsPage() {

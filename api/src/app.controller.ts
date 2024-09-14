@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ComponentService } from './services/component.service';
-import { ComponentTypeService } from './services/componentType.service';
+import { ProductService } from './services/product.service';
+import { ProductTypeService } from './services/productType.service';
 import { SpecificationService } from './services/specification.service';
 import { SpecificationTypeService } from './services/specificationType.service';
 import {
-  ComponentType as ComponentTypeModel,
+  ProductType as ProductTypeModel,
   SpecificationType as SpecificationTypeModel,
   Specification as SpecificationModel,
 } from '@prisma/client';
@@ -12,8 +12,8 @@ import {
 @Controller()
 export class AppController {
   constructor(
-    private readonly componentService: ComponentService,
-    private readonly componentTypeService: ComponentTypeService,
+    private readonly productService: ProductService,
+    private readonly productTypeService: ProductTypeService,
     private readonly specificationService: SpecificationService,
     private readonly specificationTypeService: SpecificationTypeService,
   ) {}

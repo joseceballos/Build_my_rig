@@ -97,13 +97,13 @@ export class FamilySpecificationService {
             },
           });
         if (existingSpecificationFamilyQty.length === 1) {
-          const existingSpecificationComponentQty =
-            await this.prisma.componentSpecification.findMany({
+          const existingSpecificationProductQty =
+            await this.prisma.productSpecification.findMany({
               where: {
                 specificationId: existingSpecification.id,
               },
             });
-          if (existingSpecificationComponentQty.length === 0) {
+          if (existingSpecificationProductQty.length === 0) {
             await this.prisma.specification.delete({
               where: {
                 id: existingSpecification.id,

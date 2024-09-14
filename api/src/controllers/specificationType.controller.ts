@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ComponentService } from '../services/component.service';
-import { ComponentTypeService } from '../services/componentType.service';
+import { ProductService } from '../services/product.service';
+import { ProductTypeService } from '../services/productType.service';
 import { SpecificationService } from '../services/specification.service';
 import { SpecificationTypeService } from '../services/specificationType.service';
 import { SpecificationType as SpecificationTypeModel } from '@prisma/client';
@@ -8,8 +8,8 @@ import { SpecificationType as SpecificationTypeModel } from '@prisma/client';
 @Controller('specificationTypes')
 export class SpecificationTypeController {
   constructor(
-    private readonly componentService: ComponentService,
-    private readonly componentTypeService: ComponentTypeService,
+    private readonly productService: ProductService,
+    private readonly productTypeService: ProductTypeService,
     private readonly specificationService: SpecificationService,
     private readonly specificationTypeService: SpecificationTypeService,
   ) {}
@@ -25,20 +25,20 @@ export class SpecificationTypeController {
   async getSpecificationTypes(): Promise<SpecificationTypeModel[]> {
     return this.specificationTypeService.specificationTypes({
       orderBy: {
-        componentType: {
+        productType: {
           order: 'asc',
         },
       },
     });
   }
 
-  @Get('byComponentType/:componentTypeId')
-  async getSpecificationTypesByComponentType(
-    @Param('componentTypeId') componentTypeId: string,
+  @Get('byProductType/:productTypeId')
+  async getSpecificationTypesByProductType(
+    @Param('productTypeId') productTypeId: string,
   ): Promise<SpecificationTypeModel[]> {
     return this.specificationTypeService.specificationTypes({
       where: {
-        componentTypeId: Number(componentTypeId),
+        productTypeId: Number(productTypeId),
       },
     });
   }
@@ -52,10 +52,10 @@ export class SpecificationTypeController {
       description: string;
       valueType: string;
       filterType: string;
-      componentTypeId?: number | undefined;
+      productTypeId?: number | undefined;
     },
   ): Promise<SpecificationTypeModel> {
-    const { name, description, valueType, filterType, componentTypeId } =
+    const { name, description, valueType, filterType, productTypeId } =
       specificationTypeData;
 
     let data: {
@@ -63,9 +63,9 @@ export class SpecificationTypeController {
       description: string;
       valueType: string;
       filterType: string;
-      componentType?: undefined | { connect: { id: number } };
+      productType?: undefined | { connect: { id: number } };
     };
-    if (componentTypeId === undefined || componentTypeId === 0) {
+    if (productTypeId === undefined || productTypeId === 0) {
       data = {
         name,
         description,
@@ -78,8 +78,8 @@ export class SpecificationTypeController {
         description,
         valueType,
         filterType,
-        componentType: {
-          connect: { id: componentTypeId },
+        productType: {
+          connect: { id: productTypeId },
         },
       };
     }
@@ -97,40 +97,40 @@ export class SpecificationTypeController {
       description: string;
       valueType: string;
       filterType: string;
-      componentTypeId?: number | null;
+      productTypeId?: number | null;
     },
   ): Promise<SpecificationTypeModel> {
-    const { id, name, description, valueType, filterType, componentTypeId } =
+    const { id, name, description, valueType, filterType, productTypeId } =
       specificationTypeData;
     const oldSpecificationType =
       await this.specificationTypeService.specificationType({ id });
 
-    let componentTypeConnector;
+    let productTypeConnector;
 
     if (
-      ((componentTypeId === undefined || componentTypeId === 0) &&
-        oldSpecificationType.componentTypeId !== null) ||
-      (componentTypeId !== undefined &&
-        componentTypeId > 0 &&
-        oldSpecificationType.componentTypeId !== null &&
-        componentTypeId !== oldSpecificationType.componentTypeId)
+      ((productTypeId === undefined || productTypeId === 0) &&
+        oldSpecificationType.productTypeId !== null) ||
+      (productTypeId !== undefined &&
+        productTypeId > 0 &&
+        oldSpecificationType.productTypeId !== null &&
+        productTypeId !== oldSpecificationType.productTypeId)
     ) {
-      componentTypeConnector = {
-        disconnect: { id: oldSpecificationType.componentTypeId },
+      productTypeConnector = {
+        disconnect: { id: oldSpecificationType.productTypeId },
       };
       console.log(
-        'componentTypeId: ',
-        componentTypeId,
+        'productTypeId: ',
+        productTypeId,
         ' oldSpecificationType: ',
         oldSpecificationType,
       );
-    } else if (componentTypeId !== undefined && componentTypeId > 0) {
-      componentTypeConnector = {
-        connect: { id: componentTypeId },
+    } else if (productTypeId !== undefined && productTypeId > 0) {
+      productTypeConnector = {
+        connect: { id: productTypeId },
       };
     }
 
-    console.log(componentTypeConnector);
+    console.log(productTypeConnector);
 
     return this.specificationTypeService.updateSpecificationType({
       where: { id },
@@ -139,7 +139,7 @@ export class SpecificationTypeController {
         description,
         valueType,
         filterType,
-        componentType: componentTypeConnector,
+        productType: productTypeConnector,
       },
     });
   }

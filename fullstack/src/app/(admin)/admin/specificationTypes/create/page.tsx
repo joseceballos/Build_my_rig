@@ -1,6 +1,6 @@
 "use server";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import { SpecificationType } from "@/api/specificationType";
 import FormCreateSpecificationType from "@/forms/components/SpecificationTypes/FormCreate";
 

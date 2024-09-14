@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { ComponentType } from "@/api/componentType";
-import { Component } from "@/api/component";
+import { ComponentType } from "@/api/productType";
+import { Component } from "@/api/product";
 
 type ComponentResumeFromCookiesReturn = {
   type: ComponentType;

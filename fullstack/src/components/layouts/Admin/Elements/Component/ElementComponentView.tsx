@@ -1,7 +1,7 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 import ButtonEditComponent from "@/components/ui/Admin/Components/view/ButtonEditComponent";
 import ButtonDeleteComponent from "@/components/ui/Admin/Components/view/ButtonDeleteComponent";
 import { postDeleteComponent } from "@/actions/postsComponent";

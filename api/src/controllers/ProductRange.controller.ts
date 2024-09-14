@@ -26,13 +26,13 @@ export class ProductRangeController {
     });
   }
 
-  @Get('byComponentType/:componentTypeId')
-  async getProductRangesByComponentType(
-    @Param('componentTypeId') componentTypeId: string,
+  @Get('byProductType/:productTypeId')
+  async getProductRangesByProductType(
+    @Param('productTypeId') productTypeId: string,
   ): Promise<ProductRangeModel[]> {
     return this.productRangeService.productRanges({
       where: {
-        componentTypeId: Number(componentTypeId),
+        productTypeId: Number(productTypeId),
       },
       orderBy: {
         name: 'asc',
@@ -47,11 +47,11 @@ export class ProductRangeController {
     productRangeData: {
       name: string;
       description?: string;
-      componentTypeId: number;
+      productTypeId: number;
       properties?: { propertyId: number; propertyValue: string | number }[];
     },
   ): Promise<ProductRangeModel> {
-    const { name, description, componentTypeId, properties } = productRangeData;
+    const { name, description, productTypeId, properties } = productRangeData;
     let propertiesConnector;
     if (properties !== undefined) {
       if (properties.length > 0) {
@@ -72,8 +72,8 @@ export class ProductRangeController {
     return this.productRangeService.createProductRange({
       name,
       description,
-      componentType: {
-        connect: { id: componentTypeId },
+      productType: {
+        connect: { id: productTypeId },
       },
       Properties: propertiesConnector,
     });
@@ -86,11 +86,11 @@ export class ProductRangeController {
       id: number;
       name: string;
       description?: string;
-      componentTypeId: number;
+      productTypeId: number;
       properties?: { propertyId: number; propertyValue: string | number }[];
     },
   ): Promise<ProductRangeModel> {
-    const { id, name, description, componentTypeId, properties } =
+    const { id, name, description, productTypeId, properties } =
       productRangeData;
 
     const { newProperties, updateProperties, deleteProperties } =
@@ -142,8 +142,8 @@ export class ProductRangeController {
     return this.productRangeService.createProductRange({
       name,
       description,
-      componentType: {
-        connect: { id: componentTypeId },
+      productType: {
+        connect: { id: productTypeId },
       },
       Properties: {
         ...(propertiesCreateConnector || {}),

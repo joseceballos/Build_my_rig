@@ -1,52 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { ComponentSpecification, Prisma, Specification } from '@prisma/client';
+import { ProductSpecification, Prisma, Specification } from '@prisma/client';
 
 @Injectable()
-export class ComponentSpecificationService {
+export class ProductSpecificationService {
   constructor(private prisma: PrismaService) {}
 
-  async componentSpecification(params: {
-    where: Prisma.ComponentSpecificationWhereUniqueInput;
-  }): Promise<ComponentSpecification | null> {
+  async productSpecification(params: {
+    where: Prisma.ProductSpecificationWhereUniqueInput;
+  }): Promise<ProductSpecification | null> {
     const { where } = params;
-    return this.prisma.componentSpecification.findUnique({
+    return this.prisma.productSpecification.findUnique({
       where,
       include: {
-        component: true,
+        product: true,
         specification: true,
       },
     });
   }
 
-  async componentSpecifications(params: {
-    where: Prisma.ComponentSpecificationWhereInput;
-  }): Promise<ComponentSpecification[] | null> {
+  async productSpecifications(params: {
+    where: Prisma.ProductSpecificationWhereInput;
+  }): Promise<ProductSpecification[] | null> {
     const { where } = params;
-    return this.prisma.componentSpecification.findMany({
+    return this.prisma.productSpecification.findMany({
       where,
       include: {
-        component: true,
+        product: true,
         specification: true,
       },
     });
   }
 
-  async deleteComponentSpecificationByFamily(params: {
+  async deleteProductSpecificationByFamily(params: {
     familyId: number;
     specificationTypesId: number[];
   }): Promise<void> {
     const { familyId, specificationTypesId } = params;
 
     const specificationsToDeleteAll: number[] = [];
-    const specificationsToDeleteOnlyComponent: {
-      componentId: number;
+    const specificationsToDeleteOnlyProduct: {
+      productId: number;
       specificationId: number;
     }[] = [];
     specificationTypesId.map(async (specificationTypeId) => {
-      const specificationsForFamily = await this.componentSpecifications({
+      const specificationsForFamily = await this.productSpecifications({
         where: {
-          component: {
+          product: {
             familyId: familyId,
           },
           specification: {
@@ -54,7 +54,7 @@ export class ComponentSpecificationService {
           },
         },
       });
-      const specificationsTotal = await this.componentSpecifications({
+      const specificationsTotal = await this.productSpecifications({
         where: {
           specification: {
             specificationTypeId: specificationTypeId,
@@ -68,7 +68,7 @@ export class ComponentSpecificationService {
           ),
         );
       } else {
-        specificationsToDeleteOnlyComponent.push(...specificationsForFamily);
+        specificationsToDeleteOnlyProduct.push(...specificationsForFamily);
       }
     });
 
@@ -76,12 +76,12 @@ export class ComponentSpecificationService {
       this.prisma.specification.delete({ where: { id: specificationId } });
     });
 
-    specificationsToDeleteOnlyComponent.forEach(
-      ({ componentId, specificationId }) => {
-        this.prisma.componentSpecification.delete({
+    specificationsToDeleteOnlyProduct.forEach(
+      ({ productId, specificationId }) => {
+        this.prisma.productSpecification.delete({
           where: {
-            componentId_specificationId: {
-              componentId: componentId,
+            productId_specificationId: {
+              productId: productId,
               specificationId: specificationId,
             },
           },
@@ -90,8 +90,8 @@ export class ComponentSpecificationService {
     );
   }
 
-  async filterComponentSpecifications(params: {
-    componentId: number;
+  async filterProductSpecifications(params: {
+    productId: number;
     data: {
       specificationTypeId: number;
       specificationValue: string | number;
@@ -100,16 +100,16 @@ export class ComponentSpecificationService {
     newSpecifications: number[];
     deleteSpecifications: number[];
   }> {
-    const { componentId, data } = params;
+    const { productId, data } = params;
     const newSpecifications: number[] = [];
     const deleteSpecifications: number[] = [];
 
     const existingSpecifications: Specification[] | null =
       await this.prisma.specification.findMany({
         where: {
-          Components: {
+          Products: {
             some: {
-              componentId: componentId,
+              productId: productId,
             },
           },
         },
@@ -154,13 +154,13 @@ export class ComponentSpecificationService {
             specification.specificationValue === existingSpecification.value,
         )
       ) {
-        const existingSpecificationComponentQty =
-          await this.prisma.componentSpecification.findMany({
+        const existingSpecificationProductQty =
+          await this.prisma.productSpecification.findMany({
             where: {
               specificationId: existingSpecification.id,
             },
           });
-        if (existingSpecificationComponentQty.length === 1) {
+        if (existingSpecificationProductQty.length === 1) {
           const existingSpecificationFamilyQty =
             await this.prisma.familySpecification.findMany({
               where: {
@@ -174,7 +174,7 @@ export class ComponentSpecificationService {
               },
             });
           } else {
-            await this.prisma.componentSpecification.deleteMany({
+            await this.prisma.productSpecification.deleteMany({
               where: {
                 specificationId: existingSpecification.id,
               },
@@ -192,29 +192,29 @@ export class ComponentSpecificationService {
     };
   }
 
-  async createComponentSpecification(
-    data: Prisma.ComponentSpecificationCreateInput,
-  ): Promise<ComponentSpecification> {
-    return this.prisma.componentSpecification.create({
+  async createProductSpecification(
+    data: Prisma.ProductSpecificationCreateInput,
+  ): Promise<ProductSpecification> {
+    return this.prisma.productSpecification.create({
       data,
     });
   }
 
-  async updateComponentSpecification(params: {
-    where: Prisma.ComponentSpecificationWhereUniqueInput;
-    data: Prisma.ComponentSpecificationUpdateInput;
-  }): Promise<ComponentSpecification> {
+  async updateProductSpecification(params: {
+    where: Prisma.ProductSpecificationWhereUniqueInput;
+    data: Prisma.ProductSpecificationUpdateInput;
+  }): Promise<ProductSpecification> {
     const { where, data } = params;
-    return this.prisma.componentSpecification.update({
+    return this.prisma.productSpecification.update({
       data,
       where,
     });
   }
 
-  async deleteComponentSpecification(
-    where: Prisma.ComponentSpecificationWhereUniqueInput,
-  ): Promise<ComponentSpecification> {
-    return this.prisma.componentSpecification.delete({
+  async deleteProductSpecification(
+    where: Prisma.ProductSpecificationWhereUniqueInput,
+  ): Promise<ProductSpecification> {
+    return this.prisma.productSpecification.delete({
       where,
     });
   }

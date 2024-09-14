@@ -1,7 +1,7 @@
 "use server";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 import ButtonAddComponentSelect from "@/components/ui/User/Component/Select/ButtonAddComponentSelect";
 
 type ElementComponentSelectProps = {

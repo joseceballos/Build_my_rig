@@ -2,7 +2,7 @@
 
 import { formComponent } from "@/forms/schemas/SchemasComponent";
 import { postUpdateComponent } from "@/actions/postsComponent";
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 import TableElementBasic from "@/forms/components/TableElementBasic";
 
 export default function ElementComponentEdit({

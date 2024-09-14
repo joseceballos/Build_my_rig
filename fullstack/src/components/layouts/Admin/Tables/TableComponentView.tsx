@@ -4,7 +4,7 @@ import tableDataComponents from "@/data/tableDataComponents";
 import TableEditable from "./TableEditable";
 import { toPlainObjectArray } from "@/lib/utils";
 import { ComponentTypeProp, ComponentProp } from "@/types/api";
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import ElementsComponentEditable from "../Elements/Component/ElementsComponentEditable";
 
 export default async function TableComponentView() {

@@ -1,11 +1,11 @@
 "use client";
 
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 import { ComponentTypeProp, ComponentProp } from "@/types/api";
 import { useState } from "react";
 import ElementComponentView from "./ElementComponentView";
 import ElementComponentEdit from "./ElementComponentEdit";
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 
 type elements = {
   editing: boolean;

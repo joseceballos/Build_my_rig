@@ -1,6 +1,6 @@
 "use server";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import tableDataComponentsByComponentType from "@/data/tableDataComponentsByComponentType";
 import TableSelectable from "./TableSelectable";
 import SelectComponentItem from "../Elements/ElementComponentSelect";

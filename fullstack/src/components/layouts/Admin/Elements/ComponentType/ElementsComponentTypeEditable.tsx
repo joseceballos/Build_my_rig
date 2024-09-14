@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import { ComponentTypeProp } from "@/types/api";
 import { useState } from "react";
 import ElementComponentTypeView from "./ElementComponentTypeView";

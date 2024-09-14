@@ -52,13 +52,13 @@ export class Specification {
     return specifications;
   }
 
-  public static async getSpecificationsByComponent(
-    componentId: number,
+  public static async getSpecificationsByProduct(
+    productId: number,
   ): Promise<Specification[]> {
     const data: SpecificationProp[] | undefined = await getFetch(
       "specifications",
-      "specifications/byComponent/",
-      componentId.toString(),
+      "specifications/byProduct/",
+      productId.toString(),
     );
     let specifications: Specification[] = [];
     if (data !== undefined) {

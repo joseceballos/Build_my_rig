@@ -2,8 +2,8 @@
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ComponentType } from "@/api/componentType";
-import { Component } from "@/api/component";
+import { ComponentType } from "@/api/productType";
+import { Component } from "@/api/product";
 import ButtonSelectComponent from "@/components/ui/User/Component/Resume/ButtonSelectComponentResume";
 import ButtonRemoveComponent from "@/components/ui/User/Component/Resume/ButtonRemoveComponentResume";
 

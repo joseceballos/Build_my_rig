@@ -4,7 +4,7 @@ import { Family as FamilyModel } from '@prisma/client';
 import { FamilySpecificationService } from 'src/services/familySpecification.service';
 import { FamilySpecificationTypeService } from 'src/services/familySpecificationType.service';
 import { SpecificationService } from 'src/services/specification.service';
-import { ComponentSpecificationService } from 'src/services/componentSpecification.service';
+import { ProductSpecificationService } from 'src/services/productSpecification.service';
 
 @Controller('families')
 export class FamilyController {
@@ -13,7 +13,7 @@ export class FamilyController {
     private readonly familySpecificationService: FamilySpecificationService,
     private readonly familySpecificationTypeService: FamilySpecificationTypeService,
     private readonly specificationService: SpecificationService,
-    private readonly componentSpecificationService: ComponentSpecificationService,
+    private readonly productSpecificationService: ProductSpecificationService,
   ) {}
 
   @Get('/:id')
@@ -161,12 +161,10 @@ export class FamilyController {
           }
         : undefined;
 
-    await this.componentSpecificationService.deleteComponentSpecificationByFamily(
-      {
-        familyId: id,
-        specificationTypesId: deleteSpecificationTypes,
-      },
-    );
+    await this.productSpecificationService.deleteProductSpecificationByFamily({
+      familyId: id,
+      specificationTypesId: deleteSpecificationTypes,
+    });
 
     const { newSpecifications, deleteSpecifications } =
       await this.familySpecificationService.filterFamilySpecifications({

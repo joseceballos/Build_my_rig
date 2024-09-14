@@ -1,6 +1,6 @@
 "use server";
 
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 import FormCreateComponentType from "@/forms/components/ComponentTypes/FormCreateComponentType";
 
 export default async function createComponentTypePage() {

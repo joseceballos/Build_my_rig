@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ComponentType {
+model ProductType {
   id                  Int              @default(autoincrement()) @id
   name                String           @unique
   description         String?
@@ -17,13 +17,13 @@ model ComponentType {
   ProductRanges       ProductRange[]
 }
 
-model Component {
+model Product {
   id               Int                      @default(autoincrement()) @id
   productId        String                   @unique
   model            String                   @unique
   family           Family?                   @relation(fields: [familyId], references: [id], onDelete: Cascade)
   familyId         Int?
-  Specifications   ComponentSpecification[]
+  Specifications   ProductSpecification[]
 }
 
 model SpecificationType {
@@ -32,8 +32,8 @@ model SpecificationType {
   description       String?
   valueType         String?
   filterType        String?
-  componentType     ComponentType?  @relation(fields: [componentTypeId], references: [id], onDelete: Cascade)
-  componentTypeId   Int?
+  productType       ProductType?  @relation(fields: [productTypeId], references: [id], onDelete: Cascade)
+  productTypeId     Int?
   Specifications    Specification[]
   Families          FamilySpecificationType[]
 }
@@ -44,7 +44,7 @@ model Specification {
   description         String?
   specificationType   SpecificationType         @relation(fields: [specificationTypeId], references: [id], onDelete: Cascade)
   specificationTypeId Int
-  Components          ComponentSpecification[]
+  Products            ProductSpecification[]
   Families            FamilySpecification[]
 }
 
@@ -52,8 +52,8 @@ model ProductRange {
   id                Int             @default(autoincrement()) @id
   name              String
   description       String?
-  componentType     ComponentType   @relation(fields: [componentTypeId], references: [id])
-  componentTypeId   Int
+  productType       ProductType?   @relation(fields: [productTypeId], references: [id])
+  productTypeId     Int?
   Families          Family[]
   Properties        ProductRangeProperty[]
 }
@@ -72,18 +72,18 @@ model Family {
   description         String?    
   productRange        ProductRange    @relation(fields: [productRangeId], references: [id])
   productRangeId      Int      
-  Components          Component[]
+  Products            Product[]
   Specifications      FamilySpecification[]
   SpecificationTypes  FamilySpecificationType[]
 }
 
-model ComponentSpecification {
-  componentId     Int
+model ProductSpecification {
+  productId     Int
   specificationId Int
-  component       Component      @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  product         Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   specification   Specification  @relation(fields: [specificationId], references: [id], onDelete: Cascade)
 
-  @@id([componentId, specificationId])
+  @@id([productId, specificationId])
 }
 
 model ProductRangeProperty {

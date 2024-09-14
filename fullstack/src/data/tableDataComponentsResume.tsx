@@ -1,8 +1,8 @@
 "use server";
 
 import { getComponentsResumeFromCookies } from "@/lib/cookies";
-import { Component } from "@/api/component";
-import { ComponentType } from "@/api/componentType";
+import { Component } from "@/api/product";
+import { ComponentType } from "@/api/productType";
 
 type componentResumeElements = {
   type: ComponentType;

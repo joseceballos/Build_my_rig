@@ -1,33 +1,33 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ComponentService } from '../services/component.service';
-import { ComponentTypeService } from '../services/componentType.service';
+import { ProductService } from '../services/product.service';
+import { ProductTypeService } from '../services/productType.service';
 import { SpecificationService } from '../services/specification.service';
 import { SpecificationTypeService } from '../services/specificationType.service';
-import { Component as ComponentModel } from '@prisma/client';
+import { Product as ProductModel } from '@prisma/client';
 import { FamilyService } from 'src/services/family.service';
 import { ProductRangeService } from 'src/services/productRange.service';
-import { ComponentSpecificationService } from 'src/services/componentSpecification.service';
+import { ProductSpecificationService } from 'src/services/productSpecification.service';
 
-@Controller('components')
-export class ComponentController {
+@Controller('products')
+export class ProductController {
   constructor(
-    private readonly componentService: ComponentService,
-    private readonly componentTypeService: ComponentTypeService,
+    private readonly productService: ProductService,
+    private readonly productTypeService: ProductTypeService,
     private readonly specificationService: SpecificationService,
     private readonly specificationTypeService: SpecificationTypeService,
     private readonly familyService: FamilyService,
     private readonly productRangeService: ProductRangeService,
-    private readonly componentSpecificationService: ComponentSpecificationService,
+    private readonly productSpecificationService: ProductSpecificationService,
   ) {}
 
   @Get('/:id')
-  async getComponentById(@Param('id') id: string): Promise<ComponentModel> {
-    return this.componentService.component({ id: Number(id) });
+  async getProductById(@Param('id') id: string): Promise<ProductModel> {
+    return this.productService.product({ id: Number(id) });
   }
 
   @Get('/')
-  async getComponents(): Promise<ComponentModel[]> {
-    return this.componentService.components({
+  async getProducts(): Promise<ProductModel[]> {
+    return this.productService.products({
       orderBy: {
         productId: 'asc',
       },
@@ -35,10 +35,10 @@ export class ComponentController {
   }
 
   @Get('byFamily/:familyId')
-  async getComponentsByFamily(
+  async getProductsByFamily(
     @Param('familyId') familyId: string,
-  ): Promise<ComponentModel[]> {
-    return this.componentService.components({
+  ): Promise<ProductModel[]> {
+    return this.productService.products({
       where: {
         familyId: Number(familyId),
       },
@@ -48,21 +48,21 @@ export class ComponentController {
     });
   }
 
-  @Get('byComponentType/:componentTypeId')
-  async getComponentsByComponentType(
-    @Param('componentTypeId') componentTypeId: string,
-  ): Promise<ComponentModel[]> {
+  @Get('byProductType/:productTypeId')
+  async getProductsByProductType(
+    @Param('productTypeId') productTypeId: string,
+  ): Promise<ProductModel[]> {
     const families = (
       await this.productRangeService.productRanges({
         where: {
-          componentTypeId: Number(componentTypeId),
+          productTypeId: Number(productTypeId),
         },
       })
     ).map((productRange) => productRange.id);
-    const components: ComponentModel[] = [];
+    const products: ProductModel[] = [];
     Promise.all(
       families.map(async (familyId) => {
-        const componentsForFamily = await this.componentService.components({
+        const productsForFamily = await this.productService.products({
           where: {
             familyId: familyId,
           },
@@ -70,18 +70,18 @@ export class ComponentController {
             productId: 'asc',
           },
         });
-        components.push(...componentsForFamily);
+        products.push(...productsForFamily);
       }),
     );
 
-    return components;
+    return products;
   }
 
-  // @POST Component
+  // @POST Product
   @Post('/create')
   async create(
     @Body()
-    componentData: {
+    productData: {
       productId: string;
       model: string;
       familyId: number;
@@ -90,8 +90,8 @@ export class ComponentController {
         specificationValue: string | number;
       }[];
     },
-  ): Promise<ComponentModel> {
-    const { productId, model, familyId, specifications } = componentData;
+  ): Promise<ProductModel> {
+    const { productId, model, familyId, specifications } = productData;
 
     let specificationsCreator;
 
@@ -109,7 +109,7 @@ export class ComponentController {
       specificationsCreator = { create: specificationsConnector };
     }
 
-    return this.componentService.createComponent({
+    return this.productService.createProduct({
       productId,
       model,
       family: {
@@ -124,7 +124,7 @@ export class ComponentController {
   @Post('/update')
   async update(
     @Body()
-    componentData: {
+    productData: {
       id: number;
       productId: string;
       model: string;
@@ -134,12 +134,12 @@ export class ComponentController {
         specificationValue: string | number;
       }[];
     },
-  ): Promise<ComponentModel> {
-    const { id, productId, model, familyId, specifications } = componentData;
+  ): Promise<ProductModel> {
+    const { id, productId, model, familyId, specifications } = productData;
 
     const { newSpecifications, deleteSpecifications } =
-      await this.componentSpecificationService.filterComponentSpecifications({
-        componentId: id,
+      await this.productSpecificationService.filterProductSpecifications({
+        productId: id,
         data: specifications,
       });
 
@@ -147,8 +147,8 @@ export class ComponentController {
       newSpecifications.length > 0
         ? {
             connect: newSpecifications.map((specificationId) => ({
-              componentId_specificationId: {
-                componentId: id,
+              productId_specificationId: {
+                productId: id,
                 specificationId: specificationId,
               },
             })),
@@ -159,15 +159,15 @@ export class ComponentController {
       deleteSpecifications.length > 0
         ? {
             disconnect: deleteSpecifications.map((specificationId) => ({
-              componentId_specificationId: {
-                componentId: id,
+              productId_specificationId: {
+                productId: id,
                 specificationId: specificationId,
               },
             })),
           }
         : undefined;
 
-    return this.componentService.updateComponent({
+    return this.productService.updateProduct({
       where: { id },
       data: {
         productId,
@@ -191,10 +191,10 @@ export class ComponentController {
     specificationData: {
       id: number;
     },
-  ): Promise<ComponentModel> {
+  ): Promise<ProductModel> {
     const { id } = specificationData;
     console.log(id);
-    return this.componentService.deleteComponent({
+    return this.productService.deleteProduct({
       id,
     });
   }

@@ -1,6 +1,6 @@
 "use server";
 
-import { Component } from "@/api/component";
+import { Component } from "@/api/product";
 
 type tableDataHeaders = {
   title: string;

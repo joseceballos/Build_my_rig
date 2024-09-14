@@ -13,7 +13,7 @@ export class FamilyService {
       where: familyWhereUniqueInput,
       include: {
         productRange: true,
-        Components: true,
+        Products: true,
         Specifications: true,
         SpecificationTypes: true,
       },
@@ -36,7 +36,7 @@ export class FamilyService {
       orderBy,
       include: {
         productRange: true,
-        Components: true,
+        Products: true,
         Specifications: true,
         SpecificationTypes: true,
       },
@@ -59,7 +59,7 @@ export class FamilyService {
       orderBy,
       include: {
         productRange: true,
-        Components: true,
+        Products: true,
         Specifications: true,
         SpecificationTypes: true,
       },

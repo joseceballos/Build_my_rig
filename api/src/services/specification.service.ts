@@ -11,7 +11,7 @@ export class SpecificationService {
   ): Promise<Specification> {
     return this.prisma.specification.findUnique({
       where: specificationWhereUniqueInput,
-      include: { specificationType: true, Components: true },
+      include: { specificationType: true, Products: true },
     });
   }
 
@@ -29,7 +29,7 @@ export class SpecificationService {
       cursor,
       where,
       orderBy,
-      include: { specificationType: true, Components: true },
+      include: { specificationType: true, Products: true },
     });
   }
 
@@ -47,7 +47,7 @@ export class SpecificationService {
       cursor,
       where,
       orderBy,
-      include: { specificationType: true, Components: true },
+      include: { specificationType: true, Products: true },
     });
   }
 

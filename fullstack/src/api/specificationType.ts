@@ -1,5 +1,5 @@
 import { SpecificationTypeProp } from "@/types/api";
-import { ComponentType } from "./componentType";
+import { ProductType } from "./productType";
 
 export class SpecificationType {
   public id: number;
@@ -7,7 +7,7 @@ export class SpecificationType {
   public description?: string;
   public valueType: string;
   public filterType: string;
-  public componentType?: ComponentType | undefined;
+  public productType?: ProductType | undefined;
 
   public constructor({
     id,
@@ -15,15 +15,15 @@ export class SpecificationType {
     description,
     valueType,
     filterType,
-    componentType,
+    productType,
   }: SpecificationTypeProp) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.valueType = valueType;
     this.filterType = filterType;
-    if (componentType !== null && componentType !== undefined) {
-      this.componentType = new ComponentType(componentType);
+    if (productType !== null && productType !== undefined) {
+      this.productType = new ProductType(productType);
     }
   }
 
@@ -38,7 +38,7 @@ export class SpecificationType {
         },
       );
       if (!res.ok) {
-        throw new Error(`Error fetching component types: ${res.statusText}`);
+        throw new Error(`Error fetching product types: ${res.statusText}`);
       }
       const data: SpecificationTypeProp = await res.json();
 
@@ -76,12 +76,12 @@ export class SpecificationType {
     }
   }
 
-  public static async getSpecificationTypesByComponentType(
-    componentTypeId: number,
+  public static async getSpecificationTypesByProductType(
+    productTypeId: number,
   ): Promise<SpecificationType[]> {
     try {
       const res = await fetch(
-        `http://localhost:4000/specificationTypes/byComponentType/${componentTypeId}`,
+        `http://localhost:4000/specificationTypes/byProductType/${productTypeId}`,
       );
       if (!res.ok) {
         throw new Error(
@@ -116,10 +116,10 @@ export class SpecificationType {
     description: string;
     valueType: string;
     filterType: string;
-    componentTypeId?: number | undefined;
+    productTypeId?: number | undefined;
   }): Promise<SpecificationType | undefined> {
     try {
-      const { name, description, valueType, filterType, componentTypeId } =
+      const { name, description, valueType, filterType, productTypeId } =
         specificationType;
       const res = await fetch(
         "http://localhost:4000/SpecificationTypes/create",
@@ -134,7 +134,7 @@ export class SpecificationType {
             description,
             valueType,
             filterType,
-            componentTypeId,
+            productTypeId,
           }),
         },
       );
@@ -156,7 +156,7 @@ export class SpecificationType {
       description: string;
       valueType: string;
       filterType: string;
-      componentTypeId?: number;
+      productTypeId?: number;
     },
   ): Promise<SpecificationType | undefined> {
     try {
@@ -165,7 +165,7 @@ export class SpecificationType {
         description,
         valueType,
         filterType,
-        componentTypeId = undefined,
+        productTypeId = undefined,
       } = specificationType;
 
       const res = await fetch(
@@ -182,7 +182,7 @@ export class SpecificationType {
             description,
             valueType,
             filterType,
-            componentTypeId,
+            productTypeId,
           }),
         },
       );
@@ -215,7 +215,7 @@ export class SpecificationType {
       if (!res.ok) {
         throw new Error(`Error deleting specification type: ${res.statusText}`);
       }
-      const data: Promise<ComponentType> = await res.json();
+      const data: Promise<ProductType> = await res.json();
       return {
         success: true,
       };

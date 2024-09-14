@@ -12,7 +12,7 @@ export class ProductRangeService {
     return this.prisma.productRange.findUnique({
       where: productRangeWhereUniqueInput,
       include: {
-        componentType: true,
+        productType: true,
         Properties: true,
         Families: true,
       },
@@ -33,7 +33,7 @@ export class ProductRangeService {
       cursor,
       where,
       orderBy,
-      include: { componentType: true, Properties: true, Families: true },
+      include: { productType: true, Properties: true, Families: true },
     });
   }
 
@@ -51,7 +51,7 @@ export class ProductRangeService {
       cursor,
       where,
       orderBy,
-      include: { componentType: true, Properties: true, Families: true },
+      include: { productType: true, Properties: true, Families: true },
     });
   }
 

@@ -5,7 +5,7 @@ import { ComponentTypeProp, SpecificationTypeProp } from "@/types/api";
 import { useState } from "react";
 import ElementSpecificationTypeView from "./ElementSpecificationTypeView";
 import ElementSpecificationTypeEdit from "./ElementSpecificationTypeEdit";
-import { ComponentType } from "@/api/componentType";
+import { ComponentType } from "@/api/productType";
 
 type elements = {
   editing: boolean;

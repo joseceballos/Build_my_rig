@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { ComponentService } from './services/component.service';
-import { ComponentTypeService } from './services/componentType.service';
+import { ComponentService } from './services/product.service';
+import { ComponentTypeService } from './services/productType.service';
 import { SpecificationTypeService } from './services/specificationType.service';
 import { SpecificationService } from './services/specification.service';
 import { FamilyService } from './services/family.service';
