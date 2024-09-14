@@ -4,6 +4,9 @@ import { ComponentTypeService } from '../services/componentType.service';
 import { SpecificationService } from '../services/specification.service';
 import { SpecificationTypeService } from '../services/specificationType.service';
 import { Component as ComponentModel } from '@prisma/client';
+import { FamilyService } from 'src/services/family.service';
+import { ProductRangeService } from 'src/services/productRange.service';
+import { ComponentSpecificationService } from 'src/services/componentSpecification.service';
 
 @Controller('components')
 export class ComponentController {
@@ -12,6 +15,9 @@ export class ComponentController {
     private readonly componentTypeService: ComponentTypeService,
     private readonly specificationService: SpecificationService,
     private readonly specificationTypeService: SpecificationTypeService,
+    private readonly familyService: FamilyService,
+    private readonly productRangeService: ProductRangeService,
+    private readonly componentSpecificationService: ComponentSpecificationService,
   ) {}
 
   @Get('/:id')
@@ -28,15 +34,47 @@ export class ComponentController {
     });
   }
 
+  @Get('byFamily/:familyId')
+  async getComponentsByFamily(
+    @Param('familyId') familyId: string,
+  ): Promise<ComponentModel[]> {
+    return this.componentService.components({
+      where: {
+        familyId: Number(familyId),
+      },
+      orderBy: {
+        productId: 'asc',
+      },
+    });
+  }
+
   @Get('byComponentType/:componentTypeId')
   async getComponentsByComponentType(
     @Param('componentTypeId') componentTypeId: string,
   ): Promise<ComponentModel[]> {
-    return this.componentService.components({
-      where: {
-        componentTypeId: Number(componentTypeId),
-      },
-    });
+    const families = (
+      await this.productRangeService.productRanges({
+        where: {
+          componentTypeId: Number(componentTypeId),
+        },
+      })
+    ).map((productRange) => productRange.id);
+    const components: ComponentModel[] = [];
+    Promise.all(
+      families.map(async (familyId) => {
+        const componentsForFamily = await this.componentService.components({
+          where: {
+            familyId: familyId,
+          },
+          orderBy: {
+            productId: 'asc',
+          },
+        });
+        components.push(...componentsForFamily);
+      }),
+    );
+
+    return components;
   }
 
   // @POST Component
@@ -46,44 +84,26 @@ export class ComponentController {
     componentData: {
       productId: string;
       model: string;
-      componentTypeId: number;
+      familyId: number;
       specifications?: {
         specificationTypeId: number;
         specificationValue: string | number;
       }[];
     },
   ): Promise<ComponentModel> {
-    const { productId, model, componentTypeId, specifications } = componentData;
+    const { productId, model, familyId, specifications } = componentData;
 
     let specificationsCreator;
 
     if (specifications !== undefined) {
-      const specificationsConnector = await Promise.all(
-        specifications?.map(
-          async ({ specificationTypeId, specificationValue }) => {
-            const existingSpecification =
-              await this.specificationService.specificationsFirstWith({
-                where: {
-                  specificationTypeId: Number(specificationTypeId),
-                  value: specificationValue.toString(),
-                },
-              });
-            let specificationId: number;
-            if (existingSpecification) {
-              specificationId = existingSpecification.id;
-            } else {
-              const newSpecification =
-                await this.specificationService.createSpecification({
-                  value: specificationValue.toString(),
-                  specificationType: {
-                    connect: { id: specificationTypeId },
-                  },
-                });
-              specificationId = newSpecification.id;
-            }
-            return { specification: { connect: { id: specificationId } } };
-          },
-        ),
+      const specificationsId =
+        await this.specificationService.connectSpecifications({
+          specifications,
+        });
+      const specificationsConnector = specificationsId.map(
+        (specificationId) => ({
+          specification: { connect: { id: specificationId } },
+        }),
       );
 
       specificationsCreator = { create: specificationsConnector };
@@ -92,8 +112,10 @@ export class ComponentController {
     return this.componentService.createComponent({
       productId,
       model,
-      componentType: {
-        connect: { id: componentTypeId },
+      family: {
+        connect: {
+          id: familyId,
+        },
       },
       Specifications: specificationsCreator,
     });
@@ -106,161 +128,61 @@ export class ComponentController {
       id: number;
       productId: string;
       model: string;
-      componentTypeId: number;
+      familyId: number;
       specifications?: {
         specificationTypeId: number;
         specificationValue: string | number;
       }[];
     },
   ): Promise<ComponentModel> {
-    const { id, productId, model, componentTypeId, specifications } =
-      componentData;
+    const { id, productId, model, familyId, specifications } = componentData;
 
-    if (specifications !== undefined) {
-      const oldSpecifications = await this.specificationService.specifications({
-        where: {
-          Components: {
-            some: {
-              componentId: Number(id),
-            },
-          },
-        },
+    const { newSpecifications, deleteSpecifications } =
+      await this.componentSpecificationService.filterComponentSpecifications({
+        componentId: id,
+        data: specifications,
       });
 
-      const existingSpecifications: {
-        id: number;
-        value: string;
-        description: string | null;
-        specificationTypeId: number;
-      }[] = [];
-      const newSpecifications: {
-        specificationTypeId: number;
-        specificationValue: string | number;
-      }[] = [];
-
-      for (const updatedSpecification of specifications) {
-        for (const oldSpecification of oldSpecifications) {
-          if (
-            updatedSpecification.specificationTypeId ===
-              oldSpecification.specificationTypeId &&
-            updatedSpecification.specificationValue === oldSpecification.value
-          ) {
-            existingSpecifications.push(oldSpecification);
-          } else {
-            newSpecifications.push(updatedSpecification);
-          }
-        }
-      }
-
-      const deleteSpecifications = oldSpecifications
-        .filter(
-          (oldSpecification) =>
-            !existingSpecifications.some(
-              (existingSpecification) =>
-                existingSpecification.id === oldSpecification.id,
-            ),
-        )
-        .map((specification) => {
-          return {
-            componentId_specificationId: {
-              componentId: id,
-              specificationId: specification.id,
-            },
-          };
-        });
-
-      const specificationsCreator = await Promise.all(
-        newSpecifications?.map(
-          async ({ specificationTypeId, specificationValue }) => {
-            const existingSpecification =
-              await this.specificationService.specificationsFirstWith({
-                where: {
-                  specificationTypeId: Number(specificationTypeId),
-                  value: specificationValue.toString(),
-                },
-              });
-
-            let specificationId: number;
-            if (existingSpecification) {
-              specificationId = existingSpecification.id;
-            } else {
-              const newSpecification =
-                await this.specificationService.createSpecification({
-                  value: specificationValue.toString(),
-                  specificationType: {
-                    connect: { id: specificationTypeId },
-                  },
-                });
-              specificationId = newSpecification.id;
-            }
-            return { specification: { connect: { id: specificationId } } };
-          },
-        ),
-      );
-
-      let specificationsDisconnect;
-      if (deleteSpecifications.length > 0) {
-        specificationsDisconnect = { disconnect: deleteSpecifications };
-      }
-
-      let specificationsCreate;
-      if (deleteSpecifications.length > 0) {
-        specificationsCreate = { create: specificationsCreator };
-      }
-
-      const specificationsConnector = {
-        ...specificationsDisconnect,
-        ...specificationsCreate,
-      };
-
-      return this.componentService.updateComponent({
-        where: { id },
-        data: {
-          productId,
-          model,
-          componentType: {
-            connect: { id: componentTypeId },
-          },
-          Specifications: specificationsConnector,
-        },
-      });
-    } else {
-      const deleteSpecifications = (
-        await this.specificationService.specifications({
-          where: {
-            Components: {
-              some: {
-                componentId: Number(id),
+    const specificationsConnector =
+      newSpecifications.length > 0
+        ? {
+            connect: newSpecifications.map((specificationId) => ({
+              componentId_specificationId: {
+                componentId: id,
+                specificationId: specificationId,
               },
-            },
-          },
-        })
-      ).map((specification) => {
-        return {
-          componentId_specificationId: {
-            componentId: id,
-            specificationId: specification.id,
-          },
-        };
-      });
+            })),
+          }
+        : undefined;
 
-      let specificationsDisconnect;
-      if (deleteSpecifications.length > 0) {
-        specificationsDisconnect = { disconnect: deleteSpecifications };
-      }
+    const specificationsDisconnector =
+      deleteSpecifications.length > 0
+        ? {
+            disconnect: deleteSpecifications.map((specificationId) => ({
+              componentId_specificationId: {
+                componentId: id,
+                specificationId: specificationId,
+              },
+            })),
+          }
+        : undefined;
 
-      return this.componentService.updateComponent({
-        where: { id },
-        data: {
-          productId,
-          model,
-          componentType: {
-            connect: { id: componentTypeId },
+    return this.componentService.updateComponent({
+      where: { id },
+      data: {
+        productId,
+        model,
+        family: {
+          connect: {
+            id: familyId,
           },
-          Specifications: specificationsDisconnect,
         },
-      });
-    }
+        Specifications: {
+          ...(specificationsConnector || {}),
+          ...(specificationsDisconnector || {}),
+        },
+      },
+    });
   }
 
   @Post('/delete')

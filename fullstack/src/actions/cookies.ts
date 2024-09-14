@@ -1,17 +1,17 @@
-'use server';
+"use server";
 
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export async function createCookie(type:string, id:number) {
+export async function createCookie(type: string, id: number) {
   const cookiesStore = cookies();
 
-  await cookiesStore.set({name: type, value: id.toString()});
+  await cookiesStore.set({ name: type, value: id.toString() });
 
   redirect("/");
 }
 
-export async function deleteCookie(type:string) {
+export async function deleteCookie(type: string) {
   const cookiesStore = cookies();
 
   await cookiesStore.delete(type);

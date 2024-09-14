@@ -10,7 +10,7 @@ type tableDataComponentsByComponentTypeHeaders = {
 }[];
 
 export default async function tableDataComponentsByComponentType(
-  componentTypeId: number
+  componentTypeId: number,
 ): Promise<{
   headers: tableDataComponentsByComponentTypeHeaders;
   elements: tableDataComponentsByComponentTypeElements;
@@ -20,7 +20,8 @@ export default async function tableDataComponentsByComponentType(
     { title: "Product", className: "w-2/3" },
     { title: "Actions", className: "w-1/6" },
   ];
-  const elements = await Component.getComponentsByComponentType(componentTypeId);
+  const elements =
+    await Component.getComponentsByComponentType(componentTypeId);
 
   const tableData = {
     headers,

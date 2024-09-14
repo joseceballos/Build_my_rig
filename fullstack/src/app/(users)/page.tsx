@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import TableComponentsResume from "@/components/layouts/User/Tables/TableComponentsResume";
 
 export default async function Home() {

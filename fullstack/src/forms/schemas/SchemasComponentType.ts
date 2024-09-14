@@ -12,12 +12,15 @@ const formSchema = z.object({
 
 type formSchemaCreateType = z.infer<typeof formSchema>;
 
-function inputs(orderOptions?: { value: number; name: string }[], defaultValue?: number): {
+function inputs(
+  orderOptions?: { value: number; name: string }[],
+  defaultValue?: number,
+): {
   name: keyof formSchemaCreateType;
   title: string;
   placeHolder: string;
   type: string;
-  options?: ({ value: number | string; name: string }[]) | undefined;
+  options?: { value: number | string; name: string }[] | undefined;
   defaultValue?: number | string;
 }[] {
   return [
@@ -44,7 +47,9 @@ function inputs(orderOptions?: { value: number; name: string }[], defaultValue?:
   ];
 }
 
-export function formComponentType(orderOptions?: ({ value: number; name: string }[]) | undefined) {
+export function formComponentType(
+  orderOptions?: { value: number; name: string }[] | undefined,
+) {
   return {
     formSchema: formSchema,
     inputs: inputs(orderOptions),

@@ -27,7 +27,12 @@ export default function ElementsComponentTypeEditable({
     return elementsBuilder;
   });
 
-  const orderOptions: { value: number; name: string }[] = elements.map((element) => ({value: element.componentType.order, name: element.componentType.order.toString() }));
+  const orderOptions: { value: number; name: string }[] = elements.map(
+    (element) => ({
+      value: element.componentType.order,
+      name: element.componentType.order.toString(),
+    }),
+  );
 
   async function handleChangeEditable(id: number) {
     const element = elements.find((element) => element.componentType.id === id);
@@ -41,7 +46,7 @@ export default function ElementsComponentTypeEditable({
           const nextState = prevState.map((e) => ({ ...e }));
 
           const oldOrder = nextState.find(
-            (element) => element.componentType.id === id
+            (element) => element.componentType.id === id,
           )?.componentType.order;
           const newOrder = componentType.order;
 
@@ -72,7 +77,7 @@ export default function ElementsComponentTypeEditable({
             });
 
             nextState.sort(
-              (a, b) => a.componentType.order - b.componentType.order
+              (a, b) => a.componentType.order - b.componentType.order,
             );
           } else {
             const index = nextState.findIndex((e) => e.componentType.id === id);
@@ -103,10 +108,10 @@ export default function ElementsComponentTypeEditable({
 
   async function handleDelete(id: number) {
     const deletedElement = elements.find(
-      (element) => element.componentType.id === id
+      (element) => element.componentType.id === id,
     );
     const deletedIndex = elements.findIndex(
-      (element) => element.componentType.id === id
+      (element) => element.componentType.id === id,
     );
     if (deletedElement !== undefined) {
       setElements((prevState) => {

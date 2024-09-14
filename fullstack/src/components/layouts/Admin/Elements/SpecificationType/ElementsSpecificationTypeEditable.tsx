@@ -13,12 +13,14 @@ type elements = {
 }[];
 
 export default function ElementsSpecificationTypeEditable({
-  plainElements, plainComponentTypes
+  plainElements,
+  plainComponentTypes,
 }: {
   plainElements: SpecificationTypeProp[];
   plainComponentTypes: ComponentTypeProp[];
 }) {
-  const componentTypes = ComponentType.toComponentTypesArray(plainComponentTypes);
+  const componentTypes =
+    ComponentType.toComponentTypesArray(plainComponentTypes);
   const specificationTypes =
     SpecificationType.toSpecificationTypesArray(plainElements);
   const [elements, setElements] = useState<elements>(() => {
@@ -31,12 +33,18 @@ export default function ElementsSpecificationTypeEditable({
     return elementsBuilder;
   });
 
-  const componentTypesOptions = [{value: 0, name: "<No Type>"}, ...componentTypes.map((componentType) => ({ value: componentType.id, name: componentType.name }))];
+  const componentTypesOptions = [
+    { value: 0, name: "<No Type>" },
+    ...componentTypes.map((componentType) => ({
+      value: componentType.id,
+      name: componentType.name,
+    })),
+  ];
 
   async function handleChangeEditable(id: number) {
-    console.log("id: ",id);
+    console.log("id: ", id);
     const element = elements.find(
-      (element) => element.specificationType.id === id
+      (element) => element.specificationType.id === id,
     );
     console.log("element: ", element);
     let specificationType: SpecificationType | undefined;
@@ -44,7 +52,6 @@ export default function ElementsSpecificationTypeEditable({
       specificationType = await SpecificationType.getSpecificationType(id);
       console.log("updated Specification", specificationType);
     }
-    
 
     setElements((prevState) => {
       const nextState = prevState.map((e) => ({ ...e }));
@@ -63,10 +70,10 @@ export default function ElementsSpecificationTypeEditable({
 
   async function handleDelete(id: number) {
     const deletedElement = elements.find(
-      (element) => element.specificationType.id === id
+      (element) => element.specificationType.id === id,
     );
     const deletedIndex = elements.findIndex(
-      (element) => element.specificationType.id === id
+      (element) => element.specificationType.id === id,
     );
     if (deletedElement !== undefined) {
       setElements((prevState) => {

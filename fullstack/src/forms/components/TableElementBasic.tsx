@@ -68,9 +68,9 @@ export default function TableElementBasic<T extends z.ZodObject<any>>({
             onChangeHandle={(
               eventOrValue:
                 | string
-                | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
             ) => {
-              if (typeof eventOrValue === 'string') {
+              if (typeof eventOrValue === "string") {
                 handleOnChange(input.name, eventOrValue);
               } else {
                 handleOnChange(input.name, eventOrValue.target?.value);

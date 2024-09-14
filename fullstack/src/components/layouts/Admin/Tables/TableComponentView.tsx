@@ -11,12 +11,16 @@ export default async function TableComponentView() {
   const { headers, elements } = await tableDataComponents();
   const componentTypes = await ComponentType.getComponentTypes();
   const plainElements: ComponentProp[] = toPlainObjectArray(elements);
-  const plainComponentTypes: ComponentTypeProp[] = toPlainObjectArray(componentTypes);
+  const plainComponentTypes: ComponentTypeProp[] =
+    toPlainObjectArray(componentTypes);
 
   return (
     <div className="rounded-lg border w-full mx-12">
       <TableEditable headers={headers}>
-        <ElementsComponentEditable plainElements={plainElements} plainComponentTypes={plainComponentTypes} />
+        <ElementsComponentEditable
+          plainElements={plainElements}
+          plainComponentTypes={plainComponentTypes}
+        />
       </TableEditable>
     </div>
   );

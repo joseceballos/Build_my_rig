@@ -20,7 +20,7 @@ export class Component {
     const data: ComponentProp | undefined = await getFetch(
       "component",
       "components/",
-      id.toString()
+      id.toString(),
     );
     let component;
     if (data !== undefined) {
@@ -33,7 +33,7 @@ export class Component {
     const data: ComponentProp[] | undefined = await getFetch(
       "components",
       "components",
-      ""
+      "",
     );
     let components: Component[] = [];
     if (data !== undefined) {
@@ -45,12 +45,12 @@ export class Component {
   }
 
   public static async getComponentsByComponentType(
-    componentTypeId: number
+    componentTypeId: number,
   ): Promise<Component[]> {
     const data: ComponentProp[] | undefined = await getFetch(
       "components",
       "components/byComponentType/",
-      componentTypeId.toString()
+      componentTypeId.toString(),
     );
     let components: Component[] = [];
     if (data !== undefined) {
@@ -79,8 +79,8 @@ export class Component {
     const data: ComponentProp | undefined = await postFetch(
       "components/",
       "create",
-      {productId, model, componentTypeId},
-      "creating component"
+      { productId, model, componentTypeId },
+      "creating component",
     );
     let component;
     if (data !== undefined) {
@@ -96,14 +96,14 @@ export class Component {
       productId: string;
       model: string;
       componentTypeId: number;
-    }
+    },
   ): Promise<Component | undefined> {
     const { productId, model, componentTypeId } = componentData;
     const data: ComponentProp | undefined = await postFetch(
       "components/",
       "update",
-      {id, productId, model, componentTypeId},
-      "creating component"
+      { id, productId, model, componentTypeId },
+      "creating component",
     );
     let component;
     if (data !== undefined) {
@@ -113,17 +113,17 @@ export class Component {
   }
 
   public static async deleteComponent(
-    id: number
+    id: number,
   ): Promise<{ success: boolean }> {
     const data: ComponentProp | undefined = await postFetch(
       "components/",
       "delete",
-      {id},
-      "deleting component"
+      { id },
+      "deleting component",
     );
     if (data !== undefined) {
-      return { success: true }
+      return { success: true };
     }
-    return { success: false }
+    return { success: false };
   }
 }

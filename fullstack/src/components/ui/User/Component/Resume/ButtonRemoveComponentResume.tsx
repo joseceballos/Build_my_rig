@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { deleteCookie } from "@/actions/cookies";
 import ButtonRemove from "../../../Buttons/actions/ButtonDelete";

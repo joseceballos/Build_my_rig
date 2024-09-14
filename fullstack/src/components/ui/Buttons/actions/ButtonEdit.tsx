@@ -5,11 +5,18 @@ import ButtonAction from "../ButtonAction";
 export default function ButtonEdit({
   onClick,
   defaultLogo,
-  customText
+  customText,
 }: {
   onClick: Function;
   defaultLogo: boolean;
-  customText?: string
+  customText?: string;
 }) {
-  return <ButtonAction onClick={onClick} defaultLogo={defaultLogo} logo="Edit" customText={customText} />;
+  return (
+    <ButtonAction
+      onClick={onClick}
+      defaultLogo={defaultLogo}
+      logo="Edit"
+      customText={customText}
+    />
+  );
 }

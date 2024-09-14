@@ -5,11 +5,18 @@ import ButtonAction from "../ButtonAction";
 export default function ButtonDelete({
   onClick,
   defaultLogo,
-  customText
+  customText,
 }: {
   onClick: () => Promise<void>;
   defaultLogo: boolean;
-  customText?: string
+  customText?: string;
 }) {
-  return <ButtonAction onClick={onClick} defaultLogo={defaultLogo} logo="Del" customText={customText} />;
+  return (
+    <ButtonAction
+      onClick={onClick}
+      defaultLogo={defaultLogo}
+      logo="Del"
+      customText={customText}
+    />
+  );
 }

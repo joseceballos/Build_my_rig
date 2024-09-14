@@ -14,7 +14,7 @@ export class ComponentType {
   }
 
   public static async getComponentType(
-    id: number
+    id: number,
   ): Promise<ComponentType | undefined> {
     try {
       const res = await fetch(`http://localhost:4000/componentTypes/${id}`, {
@@ -47,7 +47,7 @@ export class ComponentType {
       const ComponentTypes: ComponentType[] = data.map(
         (item: ComponentTypeProp) => {
           return new ComponentType(item);
-        }
+        },
       );
 
       return ComponentTypes;
@@ -61,7 +61,7 @@ export class ComponentType {
     const ComponentTypes: ComponentType[] = data.map(
       (item: ComponentTypeProp) => {
         return new ComponentType(item);
-      }
+      },
     );
 
     return ComponentTypes;
@@ -95,7 +95,7 @@ export class ComponentType {
 
   public static async updateComponentType(
     id: number,
-    componentType: { name: string; description: string; order: number }
+    componentType: { name: string; description: string; order: number },
   ): Promise<ComponentType | undefined> {
     try {
       const { name, description, order } = componentType;
@@ -134,11 +134,11 @@ export class ComponentType {
                     description: componentType.description,
                     order: newOrder,
                   }),
-                }
+                },
               );
               if (!res.ok) {
                 throw new Error(
-                  `Error updating component type: ${res.statusText}`
+                  `Error updating component type: ${res.statusText}`,
                 );
               }
             }
@@ -165,67 +165,65 @@ export class ComponentType {
   }
 
   public static async deleteComponentType(
-    id: number
-  ): Promise<{success: boolean}> {
+    id: number,
+  ): Promise<{ success: boolean }> {
     try {
       const componentType = await this.getComponentType(id);
       if (componentType !== undefined) {
         const order = componentType.order;
 
-          const componentTypes = await this.getComponentTypes();
-          componentTypes.map(async (componentType) => {
-            if (
-              componentType.order > order
-            ) {
-              const newOrder = componentType.order - 1;
-              const res = await fetch(
-                "http://localhost:4000/componentTypes/update",
-                {
-                  cache: "no-store",
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    id: componentType.id,
-                    name: componentType.name,
-                    description: componentType.description,
-                    order: newOrder,
-                  }),
-                }
+        const componentTypes = await this.getComponentTypes();
+        componentTypes.map(async (componentType) => {
+          if (componentType.order > order) {
+            const newOrder = componentType.order - 1;
+            const res = await fetch(
+              "http://localhost:4000/componentTypes/update",
+              {
+                cache: "no-store",
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id: componentType.id,
+                  name: componentType.name,
+                  description: componentType.description,
+                  order: newOrder,
+                }),
+              },
+            );
+            if (!res.ok) {
+              throw new Error(
+                `Error updating component type: ${res.statusText}`,
               );
-              if (!res.ok) {
-                throw new Error(
-                  `Error updating component type: ${res.statusText}`
-                );
-              }
             }
-          });
-        
-          const res = await fetch("http://localhost:4000/componentTypes/delete", {
-            cache: "no-store",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id }),
-          });
-          if (!res.ok) {
-            throw new Error(`Error deleting component type: ${res.statusText}`);
           }
-          const data: Promise<ComponentType> = await res.json();
-          return {
-            success: true,
-          }
+        });
+
+        const res = await fetch("http://localhost:4000/componentTypes/delete", {
+          cache: "no-store",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        });
+        if (!res.ok) {
+          throw new Error(`Error deleting component type: ${res.statusText}`);
         }
+        const data: Promise<ComponentType> = await res.json();
+        return {
+          success: true,
+        };
+      }
     } catch (error) {
       console.error(error);
       return {
         success: false,
-      }
+      };
     }
     return {
       success: false,
-    }
+    };
   }
 }

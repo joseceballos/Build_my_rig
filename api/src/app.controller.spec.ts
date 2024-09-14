@@ -4,6 +4,8 @@ import { ComponentService } from './services/component.service';
 import { ComponentTypeService } from './services/componentType.service';
 import { SpecificationTypeService } from './services/specificationType.service';
 import { SpecificationService } from './services/specification.service';
+import { FamilyService } from './services/family.service';
+import { ProductRangeService } from './services/productRange.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -16,6 +18,8 @@ describe('AppController', () => {
         ComponentTypeService,
         SpecificationTypeService,
         SpecificationService,
+        FamilyService,
+        ProductRangeService,
       ],
     }).compile();
 

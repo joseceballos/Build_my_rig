@@ -21,7 +21,7 @@ export class SpecificationService {
     cursor?: Prisma.SpecificationWhereUniqueInput;
     where?: Prisma.SpecificationWhereInput;
     orderBy?: Prisma.SpecificationOrderByWithRelationInput;
-  }): Promise<Specification> {
+  }): Promise<Specification | null> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.specification.findFirst({
       skip,
@@ -49,6 +49,45 @@ export class SpecificationService {
       orderBy,
       include: { specificationType: true, Components: true },
     });
+  }
+
+  async connectSpecifications(params: {
+    specifications: {
+      specificationTypeId: number;
+      specificationValue: string | number;
+    }[];
+  }): Promise<number[]> {
+    const { specifications } = params;
+    const connectSpecifications: number[] = [];
+    const createSpecifications: {
+      specificationTypeId: number;
+      specificationValue: string | number;
+    }[] = [];
+    specifications.forEach(async (specification) => {
+      const existingSpecification = await this.specificationsFirstWith({
+        where: {
+          specificationTypeId: specification.specificationTypeId,
+          value: specification.specificationValue.toString(),
+        },
+      });
+      if (existingSpecification) {
+        connectSpecifications.push(existingSpecification.id);
+      } else {
+        createSpecifications.push(specification);
+      }
+    });
+
+    createSpecifications.forEach(async (specification) => {
+      const newSpecification = await this.createSpecification({
+        value: specification.specificationValue.toString(),
+        specificationType: {
+          connect: { id: specification.specificationTypeId },
+        },
+      });
+      connectSpecifications.push(newSpecification.id);
+    });
+
+    return connectSpecifications;
   }
 
   async createSpecification(

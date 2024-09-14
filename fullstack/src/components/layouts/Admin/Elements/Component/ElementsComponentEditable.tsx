@@ -13,14 +13,15 @@ type elements = {
 }[];
 
 export default function ElementsComponentEditable({
-  plainElements, plainComponentTypes
+  plainElements,
+  plainComponentTypes,
 }: {
   plainElements: ComponentProp[];
   plainComponentTypes: ComponentTypeProp[];
 }) {
-  const componentTypes = ComponentType.toComponentTypesArray(plainComponentTypes);
-  const components =
-    Component.toComponentsArray(plainElements);
+  const componentTypes =
+    ComponentType.toComponentTypesArray(plainComponentTypes);
+  const components = Component.toComponentsArray(plainElements);
   const [elements, setElements] = useState<elements>(() => {
     const elementsBuilder: elements = components.map((item) => {
       return {
@@ -31,20 +32,22 @@ export default function ElementsComponentEditable({
     return elementsBuilder;
   });
 
-  const componentTypesOptions = [...componentTypes.map((componentType) => ({ value: componentType.id, name: componentType.name }))];
+  const componentTypesOptions = [
+    ...componentTypes.map((componentType) => ({
+      value: componentType.id,
+      name: componentType.name,
+    })),
+  ];
 
   async function handleChangeEditable(id: number) {
-    console.log("id: ",id);
-    const element = elements.find(
-      (element) => element.component.id === id
-    );
+    console.log("id: ", id);
+    const element = elements.find((element) => element.component.id === id);
     console.log("element: ", element);
     let component: Component | undefined;
     if (element?.editing) {
       component = await Component.getComponent(id);
       console.log("updated Specification", component);
     }
-    
 
     setElements((prevState) => {
       const nextState = prevState.map((e) => ({ ...e }));
@@ -63,10 +66,10 @@ export default function ElementsComponentEditable({
 
   async function handleDelete(id: number) {
     const deletedElement = elements.find(
-      (element) => element.component.id === id
+      (element) => element.component.id === id,
     );
     const deletedIndex = elements.findIndex(
-      (element) => element.component.id === id
+      (element) => element.component.id === id,
     );
     if (deletedElement !== undefined) {
       setElements((prevState) => {
@@ -87,9 +90,7 @@ export default function ElementsComponentEditable({
               key={component.id}
               component={component}
               componentTypesOptions={componentTypesOptions}
-              onChangeEditable={() =>
-                handleChangeEditable(component.id)
-              }
+              onChangeEditable={() => handleChangeEditable(component.id)}
             />
           );
         } else {
@@ -97,9 +98,7 @@ export default function ElementsComponentEditable({
             <ElementComponentView
               key={component.id}
               component={component}
-              onChangeEditable={() =>
-                handleChangeEditable(component.id)
-              }
+              onChangeEditable={() => handleChangeEditable(component.id)}
               onDelete={() => handleDelete(component.id)}
             />
           );

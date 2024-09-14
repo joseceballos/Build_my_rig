@@ -7,9 +7,14 @@ import ButtonDeleteSpecificationType from "@/components/ui/Admin/SpecificationTy
 import { postDeleteSpecificationType } from "@/actions/postsSpecificationType";
 
 export default function ElementSpecificationTypeView({
-  specificationType, onChangeEditable, onDelete
-}: {specificationType: SpecificationType, onChangeEditable: Function, onDelete: () => Promise<void>}) {
-
+  specificationType,
+  onChangeEditable,
+  onDelete,
+}: {
+  specificationType: SpecificationType;
+  onChangeEditable: Function;
+  onDelete: () => Promise<void>;
+}) {
   return (
     <TableRow>
       <TableCell>{specificationType.name}</TableCell>
@@ -19,8 +24,12 @@ export default function ElementSpecificationTypeView({
       <TableCell>{specificationType.filterType}</TableCell>
       <TableCell>
         <div className="space-x-2">
-        <ButtonEditSpecificationType onClickEditable={onChangeEditable} />
-        <ButtonDeleteSpecificationType fnPost={postDeleteSpecificationType} fnOnSuccess={onDelete} id={specificationType.id} />
+          <ButtonEditSpecificationType onClickEditable={onChangeEditable} />
+          <ButtonDeleteSpecificationType
+            fnPost={postDeleteSpecificationType}
+            fnOnSuccess={onDelete}
+            id={specificationType.id}
+          />
         </div>
       </TableCell>
     </TableRow>

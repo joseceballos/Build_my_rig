@@ -52,45 +52,45 @@ export default function FormBasic<T extends z.ZodObject<any>>({
 
   return (
     <>
-    <div className="space-y-4">
-      {inputs.map((input) => (
-        <InputBasic
-          key={input.name}
-          id={input.name}
-          title={input.title}
-          placeholder={input.placeHolder}
-          type={input.type}
-          form={form}
-          errors={errors}
-          defaultValue={defaultValues[input.name]}
-          options={input.options}
-          onChangeHandle={(
-            eventOrValue:
-              | string
-              | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            if (typeof eventOrValue === "string") {
-              handleOnChange(input.name, eventOrValue);
-            } else {
-              handleOnChange(input.name, eventOrValue.target?.value);
-            }
-          }}
-        />
-      ))}
+      <div className="space-y-4">
+        {inputs.map((input) => (
+          <InputBasic
+            key={input.name}
+            id={input.name}
+            title={input.title}
+            placeholder={input.placeHolder}
+            type={input.type}
+            form={form}
+            errors={errors}
+            defaultValue={defaultValues[input.name]}
+            options={input.options}
+            onChangeHandle={(
+              eventOrValue:
+                | string
+                | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+            ) => {
+              if (typeof eventOrValue === "string") {
+                handleOnChange(input.name, eventOrValue);
+              } else {
+                handleOnChange(input.name, eventOrValue.target?.value);
+              }
+            }}
+          />
+        ))}
 
-      <Form {...form}>
-        <form onSubmit={onSubmit}>
-          {inputs.map((input) => (
-            <input
-              key={input.name}
-              type="hidden"
-              name={input.name}
-              value={inputValues[input.name]}
-            />
-          ))}
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+        <Form {...form}>
+          <form onSubmit={onSubmit}>
+            {inputs.map((input) => (
+              <input
+                key={input.name}
+                type="hidden"
+                name={input.name}
+                value={inputValues[input.name]}
+              />
+            ))}
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
       </div>
     </>
   );

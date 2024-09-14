@@ -5,11 +5,18 @@ import ButtonAction from "../ButtonAction";
 export default function ButtonAdd({
   onClick,
   defaultLogo,
-  customText
+  customText,
 }: {
   onClick: () => Promise<void>;
   defaultLogo: boolean;
-  customText?: string
+  customText?: string;
 }) {
-  return <ButtonAction onClick={onClick} defaultLogo={defaultLogo} logo="Add" customText={customText} />;
+  return (
+    <ButtonAction
+      onClick={onClick}
+      defaultLogo={defaultLogo}
+      logo="Add"
+      customText={customText}
+    />
+  );
 }

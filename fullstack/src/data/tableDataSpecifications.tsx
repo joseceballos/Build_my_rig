@@ -9,7 +9,10 @@ type tableDataHeaders = {
 
 type tableDataElements = Specification[];
 
-export default async function tableDataSpecifications(specificationTypeId?: number | undefined, componentId?: number | undefined): Promise<{
+export default async function tableDataSpecifications(
+  specificationTypeId?: number | undefined,
+  componentId?: number | undefined,
+): Promise<{
   headers: tableDataHeaders;
   elements: tableDataElements;
 }> {
@@ -21,13 +24,14 @@ export default async function tableDataSpecifications(specificationTypeId?: numb
   ];
   let elements: Specification[] = [];
 
-  if(specificationTypeId !== undefined) {
-    elements = await Specification.getSpecificationsBySpecificationType(specificationTypeId);
-  } else if(componentId !== undefined) {
+  if (specificationTypeId !== undefined) {
+    elements =
+      await Specification.getSpecificationsBySpecificationType(
+        specificationTypeId,
+      );
+  } else if (componentId !== undefined) {
     elements = await Specification.getSpecificationsByComponent(componentId);
   }
-  
-  
 
   const tableData = {
     headers,

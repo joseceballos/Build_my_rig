@@ -35,24 +35,28 @@ export default function InputBasic({
   options?: { value: number | string; name: string }[];
   onChangeHandle?: (value: string) => void;
 }) {
-
   let content;
 
   function handleValueChange(value: string) {
-    if(onChangeHandle !== undefined)
-    {
+    if (onChangeHandle !== undefined) {
       onChangeHandle(value);
       console.log(value);
     }
   }
 
-  function handleChange (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleChange(
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
     if (onChangeHandle) onChangeHandle(e.target.value);
-  };
+  }
 
   if (type === "select") {
     content = (
-      <Select defaultValue={defaultValue?.toString()} value={value?.toString()} onValueChange={handleValueChange}>
+      <Select
+        defaultValue={defaultValue?.toString()}
+        value={value?.toString()}
+        onValueChange={handleValueChange}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

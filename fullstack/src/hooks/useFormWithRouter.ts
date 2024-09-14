@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ type FormConfig<T extends z.ZodObject<any>> = {
 };
 
 export function useFormWithRouter<T extends z.ZodObject<any>>(
-  config: FormConfig<T>
+  config: FormConfig<T>,
 ) {
   const { formSchema, defaultValues } = config;
   const [errors, setErrors] = useState<{ [key: string]: string }>({});

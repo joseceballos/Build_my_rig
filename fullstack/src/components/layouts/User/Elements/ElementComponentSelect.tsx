@@ -11,14 +11,15 @@ type ElementComponentSelectProps = {
 export default async function ElementComponentSelect({
   component,
 }: ElementComponentSelectProps) {
-
   return (
     <TableRow>
       <TableCell>{component.componentType.name}</TableCell>
       <TableCell>{component.model}</TableCell>
       <TableCell>
         {
-          <ButtonAddComponentSelect componentType={component.componentType.name} componentId={component.id}
+          <ButtonAddComponentSelect
+            componentType={component.componentType.name}
+            componentId={component.id}
           />
         }
       </TableCell>

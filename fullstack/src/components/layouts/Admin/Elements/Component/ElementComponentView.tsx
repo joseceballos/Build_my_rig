@@ -7,9 +7,14 @@ import ButtonDeleteComponent from "@/components/ui/Admin/Components/view/ButtonD
 import { postDeleteComponent } from "@/actions/postsComponent";
 
 export default function ElementComponentView({
-  component, onChangeEditable, onDelete
-}: {component: Component, onChangeEditable: Function, onDelete: () => Promise<void>}) {
-
+  component,
+  onChangeEditable,
+  onDelete,
+}: {
+  component: Component;
+  onChangeEditable: Function;
+  onDelete: () => Promise<void>;
+}) {
   return (
     <TableRow>
       <TableCell>{component.productId}</TableCell>
@@ -17,8 +22,12 @@ export default function ElementComponentView({
       <TableCell>{component.model}</TableCell>
       <TableCell>
         <div className="space-x-2">
-        <ButtonEditComponent onClickEditable={onChangeEditable} />
-        <ButtonDeleteComponent fnPost={postDeleteComponent} fnOnSuccess={onDelete} id={component.id} />
+          <ButtonEditComponent onClickEditable={onChangeEditable} />
+          <ButtonDeleteComponent
+            fnPost={postDeleteComponent}
+            fnOnSuccess={onDelete}
+            id={component.id}
+          />
         </div>
       </TableCell>
     </TableRow>

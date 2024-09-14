@@ -8,18 +8,25 @@ export class Specification {
   public description?: string | undefined;
   public specificationType: SpecificationType;
 
-  private constructor({ id, value, description, specificationType }: SpecificationProp) {
+  private constructor({
+    id,
+    value,
+    description,
+    specificationType,
+  }: SpecificationProp) {
     this.id = id;
     this.value = value;
     this.description = description;
     this.specificationType = new SpecificationType(specificationType);
   }
 
-  public static async getSpecification(id: number): Promise<Specification | undefined> {
+  public static async getSpecification(
+    id: number,
+  ): Promise<Specification | undefined> {
     const data: SpecificationProp | undefined = await getFetch(
       "specification",
       "specifications/",
-      id.toString()
+      id.toString(),
     );
     let specification;
     if (data !== undefined) {
@@ -28,11 +35,13 @@ export class Specification {
     return specification;
   }
 
-  public static async getSpecificationsBySpecificationType( specificationTypeId: number): Promise<Specification[]> {
+  public static async getSpecificationsBySpecificationType(
+    specificationTypeId: number,
+  ): Promise<Specification[]> {
     const data: SpecificationProp[] | undefined = await getFetch(
       "specifications",
       "specifications/bySpecificationType",
-      specificationTypeId.toString()
+      specificationTypeId.toString(),
     );
     let specifications: Specification[] = [];
     if (data !== undefined) {
@@ -44,12 +53,12 @@ export class Specification {
   }
 
   public static async getSpecificationsByComponent(
-    componentId: number
+    componentId: number,
   ): Promise<Specification[]> {
     const data: SpecificationProp[] | undefined = await getFetch(
       "specifications",
       "specifications/byComponent/",
-      componentId.toString()
+      componentId.toString(),
     );
     let specifications: Specification[] = [];
     if (data !== undefined) {
@@ -61,9 +70,11 @@ export class Specification {
   }
 
   public static toSpecificationsArray(data: SpecificationProp[]) {
-    const specifications: Specification[] = data.map((item: SpecificationProp) => {
-      return new Specification(item);
-    });
+    const specifications: Specification[] = data.map(
+      (item: SpecificationProp) => {
+        return new Specification(item);
+      },
+    );
 
     return specifications;
   }
@@ -79,7 +90,7 @@ export class Specification {
       "specifications/",
       "create",
       [value, description, specificationTypeId],
-      "creating specification"
+      "creating specification",
     );
     let specification;
     if (data !== undefined) {
@@ -94,14 +105,14 @@ export class Specification {
       value: string;
       description?: string;
       specificationTypeId: number;
-    }
+    },
   ): Promise<Specification | undefined> {
     const { value, description, specificationTypeId } = specificationData;
     const data: SpecificationProp | undefined = await postFetch(
       "specifications/",
       "update",
       [id, value, description, specificationTypeId],
-      "creating specification"
+      "creating specification",
     );
     let specification;
     if (data !== undefined) {
@@ -111,17 +122,17 @@ export class Specification {
   }
 
   public static async deleteSpecification(
-    id: number
+    id: number,
   ): Promise<{ success: boolean }> {
     const data: SpecificationProp | undefined = await postFetch(
       "specifications/",
       "delete",
       [id],
-      "deleting specification"
+      "deleting specification",
     );
     if (data !== undefined) {
-      return { success: true }
+      return { success: true };
     }
-    return { success: false }
+    return { success: false };
   }
 }

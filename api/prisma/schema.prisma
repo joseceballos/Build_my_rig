@@ -9,20 +9,20 @@ datasource db {
 }
 
 model ComponentType {
-  id                 Int              @default(autoincrement()) @id
-  name               String           @unique
-  description        String?
-  order              Int
-  Components         Component[]
-  SpecificationTypes SpecificationType[]
+  id                  Int              @default(autoincrement()) @id
+  name                String           @unique
+  description         String?
+  order               Int
+  SpecificationTypes  SpecificationType[]
+  ProductRanges       ProductRange[]
 }
 
 model Component {
-  id               Int             @default(autoincrement()) @id
-  productId        String          @unique
-  model            String          @unique
-  componentType    ComponentType   @relation(fields: [componentTypeId], references: [id], onDelete: Cascade)
-  componentTypeId  Int
+  id               Int                      @default(autoincrement()) @id
+  productId        String                   @unique
+  model            String                   @unique
+  family           Family?                   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  familyId         Int?
   Specifications   ComponentSpecification[]
 }
 
@@ -35,15 +35,46 @@ model SpecificationType {
   componentType     ComponentType?  @relation(fields: [componentTypeId], references: [id], onDelete: Cascade)
   componentTypeId   Int?
   Specifications    Specification[]
+  Families          FamilySpecificationType[]
 }
 
 model Specification {
-  id               Int             @default(autoincrement()) @id
-  value            String
-  description      String?
-  specificationType SpecificationType @relation(fields: [specificationTypeId], references: [id], onDelete: Cascade)
+  id                  Int                       @default(autoincrement()) @id
+  value               String
+  description         String?
+  specificationType   SpecificationType         @relation(fields: [specificationTypeId], references: [id], onDelete: Cascade)
   specificationTypeId Int
-  Components       ComponentSpecification[]
+  Components          ComponentSpecification[]
+  Families            FamilySpecification[]
+}
+
+model ProductRange {
+  id                Int             @default(autoincrement()) @id
+  name              String
+  description       String?
+  componentType     ComponentType   @relation(fields: [componentTypeId], references: [id])
+  componentTypeId   Int
+  Families          Family[]
+  Properties        ProductRangeProperty[]
+}
+
+model Property {
+  id                Int                     @default(autoincrement()) @id
+  name              String
+  description       String?
+  ProductRanges     ProductRangeProperty[]
+}
+
+model Family {
+  id                  Int             @default(autoincrement()) @id
+  name                String          
+  year                Int
+  description         String?    
+  productRange        ProductRange    @relation(fields: [productRangeId], references: [id])
+  productRangeId      Int      
+  Components          Component[]
+  Specifications      FamilySpecification[]
+  SpecificationTypes  FamilySpecificationType[]
 }
 
 model ComponentSpecification {
@@ -53,4 +84,32 @@ model ComponentSpecification {
   specification   Specification  @relation(fields: [specificationId], references: [id], onDelete: Cascade)
 
   @@id([componentId, specificationId])
+}
+
+model ProductRangeProperty {
+  productRangeId  Int
+  propertyId      Int
+  value           String
+  productRange    ProductRange  @relation(fields: [productRangeId], references: [id], onDelete: Cascade)
+  property        Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@id([productRangeId, propertyId])
+}
+
+model FamilySpecification {
+  familyId        Int
+  specificationId Int
+  family          Family         @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  specification   Specification  @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+
+  @@id([familyId, specificationId])
+}
+
+model FamilySpecificationType {
+  familyId              Int
+  specificationTypeId   Int
+  family                Family                 @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  specificationType     SpecificationType      @relation(fields: [specificationTypeId], references: [id], onDelete: Cascade)
+
+  @@id([familyId, specificationTypeId ])
 }

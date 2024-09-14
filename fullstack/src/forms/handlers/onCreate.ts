@@ -4,7 +4,7 @@ export async function onCreate(
   event: React.FormEvent<HTMLFormElement>,
   fnPost: Function,
   fnError: Function,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) {
   event.preventDefault();
 

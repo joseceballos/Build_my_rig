@@ -28,12 +28,15 @@ export class SpecificationType {
   }
 
   public static async getSpecificationType(
-    id: number
+    id: number,
   ): Promise<SpecificationType | undefined> {
     try {
-      const res = await fetch(`http://localhost:4000/specificationTypes/${id}`, {
-        cache: "no-store",
-      });
+      const res = await fetch(
+        `http://localhost:4000/specificationTypes/${id}`,
+        {
+          cache: "no-store",
+        },
+      );
       if (!res.ok) {
         throw new Error(`Error fetching component types: ${res.statusText}`);
       }
@@ -55,7 +58,7 @@ export class SpecificationType {
       });
       if (!res.ok) {
         throw new Error(
-          `Error fetching specification types: ${res.statusText}`
+          `Error fetching specification types: ${res.statusText}`,
         );
       }
       const data = await res.json();
@@ -63,7 +66,7 @@ export class SpecificationType {
       const SpecificationTypes: SpecificationType[] = data.map(
         (item: SpecificationTypeProp) => {
           return new SpecificationType(item);
-        }
+        },
       );
 
       return SpecificationTypes;
@@ -74,15 +77,15 @@ export class SpecificationType {
   }
 
   public static async getSpecificationTypesByComponentType(
-    componentTypeId: number
+    componentTypeId: number,
   ): Promise<SpecificationType[]> {
     try {
       const res = await fetch(
-        `http://localhost:4000/specificationTypes/byComponentType/${componentTypeId}`
+        `http://localhost:4000/specificationTypes/byComponentType/${componentTypeId}`,
       );
       if (!res.ok) {
         throw new Error(
-          `Error fetching specification types: ${res.statusText}`
+          `Error fetching specification types: ${res.statusText}`,
         );
       }
 
@@ -102,7 +105,7 @@ export class SpecificationType {
     const specificationTypes: SpecificationType[] = data.map(
       (item: SpecificationTypeProp) => {
         return new SpecificationType(item);
-      }
+      },
     );
 
     return specificationTypes;
@@ -133,7 +136,7 @@ export class SpecificationType {
             filterType,
             componentTypeId,
           }),
-        }
+        },
       );
       if (!res.ok) {
         throw new Error(`Error creating specification type: ${res.statusText}`);
@@ -154,11 +157,16 @@ export class SpecificationType {
       valueType: string;
       filterType: string;
       componentTypeId?: number;
-    }
+    },
   ): Promise<SpecificationType | undefined> {
     try {
-      const { name, description, valueType, filterType, componentTypeId = undefined } =
-        specificationType;
+      const {
+        name,
+        description,
+        valueType,
+        filterType,
+        componentTypeId = undefined,
+      } = specificationType;
 
       const res = await fetch(
         "http://localhost:4000/specificationTypes/update",
@@ -176,7 +184,7 @@ export class SpecificationType {
             filterType,
             componentTypeId,
           }),
-        }
+        },
       );
       if (!res.ok) {
         throw new Error(`Error updating specification type: ${res.statusText}`);
@@ -190,7 +198,7 @@ export class SpecificationType {
   }
 
   public static async deleteSpecificationType(
-    id: number
+    id: number,
   ): Promise<{ success: boolean }> {
     try {
       const res = await fetch(
@@ -202,7 +210,7 @@ export class SpecificationType {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ id }),
-        }
+        },
       );
       if (!res.ok) {
         throw new Error(`Error deleting specification type: ${res.statusText}`);

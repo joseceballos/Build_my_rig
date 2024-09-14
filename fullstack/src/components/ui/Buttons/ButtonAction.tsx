@@ -7,7 +7,7 @@ export default function ButtonAction({
   onClick,
   defaultLogo,
   logo,
-  customText
+  customText,
 }: {
   className?: string;
   onClick: (() => Promise<void>) | (() => void);

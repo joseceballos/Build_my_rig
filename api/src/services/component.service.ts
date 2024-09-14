@@ -12,7 +12,7 @@ export class ComponentService {
     return this.prisma.component.findUnique({
       where: componentWhereUniqueInput,
       include: {
-        componentType: true,
+        family: true,
         Specifications: {
           include: {
             specification: true,
@@ -36,7 +36,7 @@ export class ComponentService {
       cursor,
       where,
       orderBy,
-      include: { componentType: true, Specifications: true },
+      include: { family: true, Specifications: true },
     });
   }
 
@@ -54,7 +54,7 @@ export class ComponentService {
       cursor,
       where,
       orderBy,
-      include: { componentType: true, Specifications: true },
+      include: { family: true, Specifications: true },
     });
   }
 

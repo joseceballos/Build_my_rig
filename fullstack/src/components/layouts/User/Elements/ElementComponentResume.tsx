@@ -12,7 +12,10 @@ type ElementComponentResumeProps = {
   component: Component | undefined;
 };
 
-export default async function ElementComponentResume({ type, component }: ElementComponentResumeProps) {
+export default async function ElementComponentResume({
+  type,
+  component,
+}: ElementComponentResumeProps) {
   return (
     <TableRow>
       <TableCell>{type.name}</TableCell>

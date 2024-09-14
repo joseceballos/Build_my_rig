@@ -18,9 +18,10 @@ export default function ElementSpecificationTypeEdit({
   onChangeEditable: (specificationTypeId: number) => void;
 }) {
   const { formSchema, inputs } = formSpecificationType(componentTypesOptions);
-  const { name, description, valueType, filterType, componentType } = specificationType;
+  const { name, description, valueType, filterType, componentType } =
+    specificationType;
   let componentTypeId: number;
-  if(componentType === undefined) {
+  if (componentType === undefined) {
     componentTypeId = 0;
   } else {
     componentTypeId = componentType.id;
@@ -32,7 +33,7 @@ export default function ElementSpecificationTypeEdit({
       description,
       valueType,
       filterType,
-      componentTypeId
+      componentTypeId,
     },
   };
 

@@ -8,7 +8,6 @@ const formSchema = z.object({
   description: z.string(),
   valueType: z.string(),
   filterType: z.string(),
-  
 });
 
 type formSchemaCreateType = z.infer<typeof formSchema>;
@@ -67,12 +66,11 @@ function inputs(componentTypesOptions?: { value: number; name: string }[]): {
       options: filterTypeOptions,
       defaultValue: "select",
     },
-    
   ];
 }
 
 export function formSpecificationType(
-  componentTypesOptions?: { value: number; name: string }[]
+  componentTypesOptions?: { value: number; name: string }[],
 ) {
   return {
     formSchema: formSchema,

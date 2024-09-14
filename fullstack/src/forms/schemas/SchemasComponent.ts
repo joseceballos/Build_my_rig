@@ -8,7 +8,6 @@ const formSchema = z.object({
   model: z.string().min(5, {
     message: "Name must be at least 5 characters.",
   }),
-  
 });
 
 type formSchemaCreateType = z.infer<typeof formSchema>;
@@ -41,12 +40,12 @@ function inputs(componentTypesOptions?: { value: number; name: string }[]): {
       title: "Model",
       placeHolder: "Enter model",
       type: "text",
-    },    
+    },
   ];
 }
 
 export function formComponent(
-  componentTypesOptions?: { value: number; name: string }[]
+  componentTypesOptions?: { value: number; name: string }[],
 ) {
   return {
     formSchema: formSchema,

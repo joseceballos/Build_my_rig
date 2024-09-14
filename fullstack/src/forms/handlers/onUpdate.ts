@@ -6,7 +6,7 @@ export async function onUpdate(
   fnPost: Function,
   fnError: Function,
   fnOnSuccess: (id: number) => void,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) {
   event.preventDefault();
 

@@ -6,12 +6,13 @@ const formSchema = z.object({
   }),
   specificationTypeId: z.number(),
   description: z.string(),
-  
 });
 
 type formSchemaCreateType = z.infer<typeof formSchema>;
 
-function inputs(specificationTypesOptions?: { value: number; name: string }[]): {
+function inputs(
+  specificationTypesOptions?: { value: number; name: string }[],
+): {
   name: keyof formSchemaCreateType;
   title: string;
   placeHolder: string;
@@ -39,12 +40,12 @@ function inputs(specificationTypesOptions?: { value: number; name: string }[]): 
       title: "Description",
       placeHolder: "Enter description",
       type: "textarea",
-    },    
+    },
   ];
 }
 
 export function formSpecification(
-  specificationTypesOptions?: { value: number; name: string }[]
+  specificationTypesOptions?: { value: number; name: string }[],
 ) {
   return {
     formSchema: formSchema,

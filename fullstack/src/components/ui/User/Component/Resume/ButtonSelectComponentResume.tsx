@@ -1,9 +1,13 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import ButtonAdd from "../../../Buttons/actions/ButtonAdd";
 
-export default function ButtonSelectComponent({typeName}:{typeName: string}) {
+export default function ButtonSelectComponent({
+  typeName,
+}: {
+  typeName: string;
+}) {
   const router = useRouter();
 
   async function handleRedirect() {
@@ -11,6 +15,10 @@ export default function ButtonSelectComponent({typeName}:{typeName: string}) {
   }
 
   return (
-    <ButtonAdd onClick={handleRedirect} defaultLogo={false} customText={`Choose a ${typeName}`} />
-  )
+    <ButtonAdd
+      onClick={handleRedirect}
+      defaultLogo={false}
+      customText={`Choose a ${typeName}`}
+    />
+  );
 }
